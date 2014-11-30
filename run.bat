@@ -1,0 +1,1 @@
+java -jar target/hofigyelo-0.1.jar

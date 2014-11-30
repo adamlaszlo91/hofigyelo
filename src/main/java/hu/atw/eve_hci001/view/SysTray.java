@@ -1,6 +1,6 @@
 package hu.atw.eve_hci001.view;
 
-import hu.atw.eve_hci001.control.Control;
+import hu.atw.eve_hci001.control.HofigyeloController;
 import hu.atw.eve_hci001.model.WeatherReport;
 
 import java.awt.Desktop;
@@ -27,7 +27,7 @@ import javax.swing.ImageIcon;
 public class SysTray implements ActionListener {
 	private SystemTray tray;
 	private TrayIcon trayIcon;
-	private Control control;
+	private HofigyeloController hofigyeloController;
 	private PopupMenu popup;
 	private Menu currentlySnowing;
 	private Menu notification;
@@ -40,11 +40,11 @@ public class SysTray implements ActionListener {
 	/**
 	 * Konstruktor a SysTray osztályhoz.
 	 * 
-	 * @param control
-	 *            A Control objektum.
+	 * @param hofigyeloController
+	 *            A hofigyeloController objektum.
 	 */
-	public SysTray(Control control) {
-		this.control = control;
+	public SysTray(HofigyeloController hofigyeloController) {
+		this.hofigyeloController = hofigyeloController;
 		this.notify = true;
 		this.tray = SystemTray.getSystemTray();
 		Image image = new ImageIcon("src/main/resources/snowflake.png")
@@ -90,7 +90,7 @@ public class SysTray implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		/* kilépés */
 		if (e.getSource() == this.exit) {
-			this.control.exit();
+			this.hofigyeloController.exit();
 			/* idokep.hu link */
 		} else if (e.getSource() == this.idokepHu) {
 			this.openWebpage("http://www.idokep.hu/idokep");
@@ -105,7 +105,7 @@ public class SysTray implements ActionListener {
 				this.notifyYesNo.setLabel("Kikapcsol");
 				this.notify = true;
 			}
-			this.control.setNotify(this.notify);
+			this.hofigyeloController.setNotify(this.notify);
 		}
 	}
 

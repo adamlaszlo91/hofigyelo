@@ -1,6 +1,6 @@
-package hu.atw.eve_hci001.model;
+package hu.atw.eve_hci001.control;
 
-import hu.atw.eve_hci001.control.Control;
+import hu.atw.eve_hci001.model.WeatherReport;
 
 import java.awt.TrayIcon;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import org.jsoup.select.Elements;
  */
 public class ReportCollector implements Runnable {
 	private Thread t;
-	private Control control;
+	private HofigyeloController hofigyeloController;
 	private final String url = "http://www.idokep.hu/idokep";
 	private ArrayList<WeatherReport> weatherReports;
 	/* a frissítés gyakorisága */
@@ -27,12 +27,12 @@ public class ReportCollector implements Runnable {
 	/**
 	 * Konstruktor a ReportCollector osztályhoz.
 	 * 
-	 * @param control
-	 *            A Control objektum.
+	 * @param hofigyeloController
+	 *            A hofigyeloControllerl objektum.
 	 */
-	public ReportCollector(Control control) {
+	public ReportCollector(HofigyeloController hofigyeloController) {
 		this.weatherReports = new ArrayList<WeatherReport>();
-		this.control = control;
+		this.hofigyeloController = hofigyeloController;
 		this.timeOut = 60000;
 	}
 
@@ -64,13 +64,13 @@ public class ReportCollector implements Runnable {
 				for (Element w : elements) {
 					this.convertandAddWeatherReport(w.attr("onmouseover"));
 				}
-				this.control.refreshReports(this.weatherReports);
+				this.hofigyeloController.refreshReports(this.weatherReports);
 				Thread.sleep(this.timeOut);
 			} catch (InterruptedException ie) {
 				/* nem érdekes */
 			} catch (Exception e) {
 				/* hálózathoz/oldalhoz kapcsolódó probléma */
-				this.control.showAlert("Hiba!",
+				this.hofigyeloController.showAlert("Hiba!",
 						"Probléma az adatok lekérésénél.",
 						TrayIcon.MessageType.ERROR);
 			}

@@ -1,6 +1,6 @@
 package hu.atw.eve_hci001;
 
-import hu.atw.eve_hci001.control.Control;
+import hu.atw.eve_hci001.control.HofigyeloController;
 
 import java.awt.SystemTray;
 
@@ -23,7 +23,7 @@ public class Main {
 			System.out.println("SystemTray nem tamogatott.");
 			System.exit(0);
 		}
-		new Control();
+		new HofigyeloController();
 	}
 
 }

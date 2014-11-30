@@ -1,6 +1,5 @@
 package hu.atw.eve_hci001.control;
 
-import hu.atw.eve_hci001.model.ReportCollector;
 import hu.atw.eve_hci001.model.WeatherReport;
 import hu.atw.eve_hci001.view.SysTray;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  * @author Ádám László
  * 
  */
-public class Control {
+public class HofigyeloController {
 	private ArrayList<WeatherReport> weatherReports;
 	private ReportCollector reportCollector;
 	private SysTray sysTray;
@@ -22,7 +21,7 @@ public class Control {
 	/**
 	 * Konstruktor a Control osztályhoz.
 	 */
-	public Control() {
+	public HofigyeloController() {
 		this.notify = true;
 		this.sysTray = new SysTray(this);
 		this.weatherReports = new ArrayList<WeatherReport>();

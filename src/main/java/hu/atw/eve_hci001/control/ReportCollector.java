@@ -58,23 +58,33 @@ public class ReportCollector implements Runnable {
 		Thread thisThread = Thread.currentThread();
 		while (this.t == thisThread) {
 			try {
-				this.weatherReports.clear();
-				Document doc = Jsoup.connect(url).get();
-				Elements elements = doc.select("area[onmouseover]");
-				for (Element w : elements) {
-					this.convertandAddWeatherReport(w.attr("onmouseover"));
-				}
-				this.hofigyeloController.refreshReports(this.weatherReports);
+				this.gatherData();
 				Thread.sleep(this.timeOut);
 			} catch (InterruptedException ie) {
 				/* nem érdekes */
-			} catch (Exception e) {
-				/* hálózathoz/oldalhoz kapcsolódó probléma */
-				this.hofigyeloController.showAlert("Hiba!",
-						"Probléma az adatok lekérésénél.",
-						TrayIcon.MessageType.ERROR);
 			}
 		}
+	}
+
+	/**
+	 * Begyûjti a szerverrõl az idõjárás jelentéseket.
+	 */
+	private void gatherData() {
+		this.weatherReports.clear();
+		try {
+			Document doc = Jsoup.connect(url).get();
+			Elements elements = doc.select("area[onmouseover]");
+			for (Element w : elements) {
+				this.convertandAddWeatherReport(w.attr("onmouseover"));
+			}
+		} catch (Exception e) {
+			/* hálózathoz/oldalhoz kapcsolódó probléma */
+			this.hofigyeloController.showAlert("Hiba!",
+					"Probléma az adatok lekérésénél.",
+					TrayIcon.MessageType.ERROR);
+			return;
+		}
+		this.hofigyeloController.refreshReports(this.weatherReports);
 	}
 
 	/**

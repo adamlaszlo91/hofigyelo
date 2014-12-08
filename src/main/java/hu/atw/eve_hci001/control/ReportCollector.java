@@ -1,5 +1,6 @@
 package hu.atw.eve_hci001.control;
 
+import hu.atw.eve_hci001.model.ConfigManager;
 import hu.atw.eve_hci001.model.WeatherReport;
 
 import java.awt.TrayIcon;
@@ -9,6 +10,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Idõjárás jelentések lekérését végzõ szál.
@@ -16,24 +19,23 @@ import org.jsoup.select.Elements;
  * @author Ádám László
  * 
  */
+
 public class ReportCollector implements Runnable {
+	final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
 	private Thread t;
-	private HofigyeloController hofigyeloController;
+	private HofigyeloController controller;
 	private final String url = "http://www.idokep.hu/idokep";
 	private ArrayList<WeatherReport> weatherReports;
-	/* a frissítés gyakorisága */
-	private long timeOut;
 
 	/**
-	 * Konstruktor a ReportCollector osztályhoz.
+	 * Konstruktor.
 	 * 
-	 * @param hofigyeloController
-	 *            A hofigyeloControllerl objektum.
+	 * @param controller
+	 *            A controllerl objektum.
 	 */
-	public ReportCollector(HofigyeloController hofigyeloController) {
+	public ReportCollector(HofigyeloController controller) {
 		this.weatherReports = new ArrayList<WeatherReport>();
-		this.hofigyeloController = hofigyeloController;
-		this.timeOut = 60000;
+		this.controller = controller;
 	}
 
 	/**
@@ -59,7 +61,7 @@ public class ReportCollector implements Runnable {
 		while (this.t == thisThread) {
 			try {
 				this.gatherData();
-				Thread.sleep(this.timeOut);
+				Thread.sleep(this.controller.getRefreshInterval());
 			} catch (InterruptedException ie) {
 				/* nem érdekes */
 			}
@@ -67,9 +69,11 @@ public class ReportCollector implements Runnable {
 	}
 
 	/**
-	 * Begyûjti a szerverrõl az idõjárás jelentéseket.
+	 * Begyûjti a szerverrõl az idõjárás jelentéseket.Szinkronizáls, mert
+	 * kívülrõl is meghívható azonnali frissítésre.
 	 */
-	private void gatherData() {
+	public synchronized void gatherData() {
+		logger.debug("Adatgyûjtés");
 		this.weatherReports.clear();
 		try {
 			Document doc = Jsoup.connect(url).get();
@@ -78,13 +82,14 @@ public class ReportCollector implements Runnable {
 				this.convertandAddWeatherReport(w.attr("onmouseover"));
 			}
 		} catch (Exception e) {
-			/* hálózathoz/oldalhoz kapcsolódó probléma */
-			this.hofigyeloController.showAlert("Hiba!",
+			/* csak hálózathoz/oldalhoz kapcsolódó probléma lehet */
+			this.controller.showAlert("Hiba!",
 					"Probléma az adatok lekérésénél.",
 					TrayIcon.MessageType.ERROR);
 			return;
 		}
-		this.hofigyeloController.refreshReports(this.weatherReports);
+		this.controller.refreshReports(this.weatherReports);
+		logger.debug("Adatgyûjtés vége");
 	}
 
 	/**

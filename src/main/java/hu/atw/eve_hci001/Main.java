@@ -1,8 +1,13 @@
 package hu.atw.eve_hci001;
 
 import hu.atw.eve_hci001.control.HofigyeloController;
+import hu.atw.eve_hci001.model.ConfigManager;
 
 import java.awt.SystemTray;
+
+import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main osztály a Hófigyelõ számára.
@@ -19,8 +24,10 @@ public class Main {
 	 *            Nem szükségel paramétereket.
 	 */
 	public static void main(String[] args) {
+		BasicConfigurator.configure();
+		Logger logger = LoggerFactory.getLogger(ConfigManager.class);
 		if (!SystemTray.isSupported()) {
-			System.out.println("SystemTray nem tamogatott.");
+			logger.error("SystemTray nem tamogatott.");
 			System.exit(0);
 		}
 		new HofigyeloController();

@@ -14,7 +14,7 @@ public class WeatherReport {
 	private String user;
 
 	/**
-	 * Konstruktor a WeatherReport osztályhoz.
+	 * Konstruktor.
 	 */
 	public WeatherReport() {
 		this.type = "";
@@ -24,42 +24,87 @@ public class WeatherReport {
 		this.degree = "";
 	}
 
+	/**
+	 * 
+	 * @return Az idõjárás jelentés típusa.
+	 */
 	public String getType() {
 		return type;
 	}
 
+	/**
+	 * 
+	 * @param type
+	 *            At idõjárás jelentés típusa.
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
+	/**
+	 * 
+	 * @return A jelentés helye.
+	 */
 	public String getLocation() {
 		return location;
 	}
 
+	/**
+	 * 
+	 * @param location
+	 *            A jelentés helye.
+	 */
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
+	/**
+	 * 
+	 * @return A bejelentés ideje.
+	 */
 	public String getTime() {
 		return time;
 	}
 
+	/**
+	 * 
+	 * @param time
+	 *            A bejelentés ideje.
+	 */
 	public void setTime(String time) {
 		this.time = time;
 	}
 
+	/**
+	 * 
+	 * @return A bejelentõ neve.
+	 */
 	public String getUser() {
 		return user;
 	}
 
+	/**
+	 * 
+	 * @param user
+	 *            A bejelentõ neve.
+	 */
 	public void setUser(String user) {
 		this.user = user;
 	}
 
+	/**
+	 * 
+	 * @return A hõmérséklet Celsius fokban.
+	 */
 	public String getDegree() {
 		return degree;
 	}
 
+	/**
+	 * 
+	 * @param degree
+	 *            A hõmérséklet Celsius fokban.
+	 */
 	public void setDegree(String degree) {
 		this.degree = degree;
 	}
@@ -77,10 +122,6 @@ public class WeatherReport {
 		return result;
 	}
 
-	/**
-	 * Ez a metódus csak a hely és az idõjárás típusa alapján állapítja meg az
-	 * egyezést.
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -90,16 +131,32 @@ public class WeatherReport {
 		if (getClass() != obj.getClass())
 			return false;
 		WeatherReport other = (WeatherReport) obj;
+		if (degree == null) {
+			if (other.degree != null)
+				return false;
+		} else if (!degree.equals(other.degree))
+			return false;
 		if (location == null) {
 			if (other.location != null)
 				return false;
 		} else if (!location.equals(other.location))
+			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		} else if (!time.equals(other.time))
 			return false;
 		if (type == null) {
 			if (other.type != null)
 				return false;
 		} else if (!type.equals(other.type))
 			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
 		return true;
 	}
+
 }

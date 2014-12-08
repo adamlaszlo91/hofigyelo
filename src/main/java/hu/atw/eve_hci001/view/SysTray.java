@@ -1,8 +1,10 @@
 package hu.atw.eve_hci001.view;
 
 import hu.atw.eve_hci001.control.HofigyeloController;
+import hu.atw.eve_hci001.model.ConfigManager;
 import hu.atw.eve_hci001.model.WeatherReport;
 
+import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Menu;
@@ -27,56 +29,88 @@ import javax.swing.ImageIcon;
 public class SysTray implements ActionListener {
 	private SystemTray tray;
 	private TrayIcon trayIcon;
-	private HofigyeloController hofigyeloController;
+	private HofigyeloController controller;
 	private PopupMenu popup;
-	private Menu currentlySnowing;
-	private Menu notification;
-	private MenuItem notifyYesNo;
-	private MenuItem idokepHu;
-	private MenuItem exit;
-	private boolean notify;
+	private Menu currentReportsMenu;
+	private Menu notificationMenu;
+	private MenuItem notifyYesNoItem;
+	private MenuItem idokepHuItem;
+	private MenuItem exitItem;
+	private MenuItem settingsItem;
 	private int reportCounter;
 
 	/**
-	 * Konstruktor a SysTray osztályhoz.
+	 * Konstruktor.
 	 * 
-	 * @param hofigyeloController
-	 *            A hofigyeloController objektum.
+	 * @param controller
+	 *            A controller objektum.
 	 */
-	public SysTray(HofigyeloController hofigyeloController) {
-		this.hofigyeloController = hofigyeloController;
-		this.notify = true;
+	public SysTray(HofigyeloController controller) {
+		this.controller = controller;
 		this.tray = SystemTray.getSystemTray();
-		Image image = new ImageIcon("src/main/resources/snowflake.png")
+		Image image = new ImageIcon(ConfigManager.getImage("snowflake.png"))
 				.getImage();
 		this.trayIcon = new TrayIcon(image);
 		this.trayIcon.setImageAutoSize(true);
 		this.trayIcon.setToolTip("Hófigyelõ\nFrissítve: soha");
-		/* menu */
+		/* popup menü */
 		this.popup = new PopupMenu();
+		/* ha túl hamar jelenítik meg, fennakadhat a program */
+		this.popup.setEnabled(false);
 
-		this.currentlySnowing = new Menu("Jelenleg havazik (0)");
-		this.popup.add(currentlySnowing);
+		this.currentReportsMenu = new Menu("Jelenleg havazik (0)");
+		this.popup.add(currentReportsMenu);
 
-		this.notification = new Menu("Figyelmeztetés (Bekapcsolva)");
-		this.notifyYesNo = new MenuItem("Kikapcsol");
-		this.notifyYesNo.addActionListener(this);
-		this.notification.add(this.notifyYesNo);
-		this.popup.add(this.notification);
+		this.notificationMenu = new Menu();
+		this.notifyYesNoItem = new MenuItem();
+		this.notificationMenu.setLabel("Figyelmeztetés (?)");
+		this.notifyYesNoItem.setLabel("?");
+		this.notifyYesNoItem.addActionListener(this);
+		this.notificationMenu.add(this.notifyYesNoItem);
+		this.popup.add(this.notificationMenu);
 
-		this.idokepHu = new MenuItem("idokep.hu");
-		this.idokepHu.addActionListener(this);
-		popup.add(idokepHu);
+		this.settingsItem = new MenuItem("Beállítások");
+		this.settingsItem.addActionListener(this);
+		this.popup.add(this.settingsItem);
 
-		this.exit = new MenuItem("Kilépés");
-		this.exit.addActionListener(this);
-		this.popup.add(exit);
+		this.idokepHuItem = new MenuItem("idokep.hu");
+		this.idokepHuItem.addActionListener(this);
+		popup.add(idokepHuItem);
+
+		this.exitItem = new MenuItem("Kilépés");
+		this.exitItem.addActionListener(this);
+		this.popup.add(exitItem);
 
 		this.trayIcon.setPopupMenu(popup);
+
 		try {
 			this.tray.add(this.trayIcon);
-		} catch (Exception e) {
-			System.out.println("TrayIcon could not be added.");
+		} catch (AWTException e) {
+			/* ha nem jelenik meg, azt úgyis látjuk */
+		}
+		this.popup.setEnabled(true);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		/* kilépés */
+		if (e.getSource() == this.exitItem) {
+			this.controller.exit();
+			/* idokep.hu link */
+		} else if (e.getSource() == this.idokepHuItem) {
+			this.openWebpage("http://www.idokep.hu/idokep");
+			/* értesítés tiltása/engedélyezése */
+		} else if (e.getSource() == this.notifyYesNoItem) {
+			if (this.controller.isNotifyRequiested()) {
+				this.notificationMenu.setLabel("Figyelmeztetés (Kikapcsolva)");
+				this.notifyYesNoItem.setLabel("Bekapcsol");
+				this.controller.setNotifyRequiestedFromMenu(false);
+			} else {
+				this.notificationMenu.setLabel("Figyelmeztetés (Bekapcsolva)");
+				this.notifyYesNoItem.setLabel("Kikapcsol");
+				this.controller.setNotifyRequiestedFromMenu(true);
+			}
+		} else if (e.getSource() == this.settingsItem) {
+			this.controller.showSettingsPanel();
 		}
 	}
 
@@ -87,57 +121,59 @@ public class SysTray implements ActionListener {
 		this.tray.remove(this.trayIcon);
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		/* kilépés */
-		if (e.getSource() == this.exit) {
-			this.hofigyeloController.exit();
-			/* idokep.hu link */
-		} else if (e.getSource() == this.idokepHu) {
-			this.openWebpage("http://www.idokep.hu/idokep");
-			/* értesítés tiltása/engedélyezése */
-		} else if (e.getSource() == this.notifyYesNo) {
-			if (this.notify) {
-				this.notification.setLabel("Figyelmeztetés (Kikapcsolva)");
-				this.notifyYesNo.setLabel("Bekapcsol");
-				this.notify = false;
-			} else {
-				this.notification.setLabel("Figyelmeztetés (Bekapcsolva)");
-				this.notifyYesNo.setLabel("Kikapcsol");
-				this.notify = true;
-			}
-			this.hofigyeloController.setNotify(this.notify);
+	/**
+	 * Frissíti a Figyelmeztetés menüpontot.
+	 */
+	public void refreshShownSettings() {
+		this.popup.setEnabled(false);
+		this.popup.removeAll();
+		if (this.controller.isNotifyRequiested()) {
+			this.notificationMenu.setLabel("Figyelmeztetés (Bekapcsolva)");
+			this.notifyYesNoItem.setLabel("Kikapcsol");
+		} else {
+			this.notificationMenu.setLabel("Figyelmeztetés (Kikapcsolva)");
+			this.notifyYesNoItem.setLabel("Bekapcsol");
 		}
+		this.popup.add(this.currentReportsMenu);
+		this.popup.add(this.notificationMenu);
+		this.popup.add(this.settingsItem);
+		this.popup.add(this.idokepHuItem);
+		this.popup.add(this.exitItem);
+		this.popup.setEnabled(true);
 	}
 
 	/**
-	 * Frissíti a menübõl elérhetó havazással kapcsolatos jelentéseket.
+	 * Frissíti a menübõl elérhetó jelentéseket.
 	 * 
-	 * @param snowReports
-	 *            A havazásról szóló jelentések.
+	 * @param weatherReports
+	 *            Az új jelentések.
 	 */
-	public void refreshSnowReports(ArrayList<WeatherReport> snowReports) {
+	public void refreshSnowReports(ArrayList<WeatherReport> weatherReports) {
 		this.reportCounter = 0;
 		/* nem engedi bekövetkezni az update-miközben-látható problémat */
+		this.popup.setEnabled(false);
 		this.popup.removeAll();
-		this.currentlySnowing.removeAll();
-		for (WeatherReport weatherReport : snowReports) {
+		this.currentReportsMenu.removeAll();
+		for (WeatherReport weatherReport : weatherReports) {
 			MenuItem snowItem = new MenuItem(weatherReport.getType() + " - "
 					+ weatherReport.getLocation() + ", "
 					+ weatherReport.getTime());
-			this.currentlySnowing.add(snowItem);
+			this.currentReportsMenu.add(snowItem);
 			this.reportCounter++;
 		}
-		this.currentlySnowing.setLabel("Jelenleg havazik ("
-				+ this.reportCounter + ")");
-		this.popup.add(this.currentlySnowing);
-		this.popup.add(this.notification);
-		this.popup.add(this.idokepHu);
-		this.popup.add(this.exit);
+		this.currentReportsMenu.setLabel("Jelentések (" + this.reportCounter
+				+ ")");
+		this.popup.add(this.currentReportsMenu);
+		this.popup.add(this.notificationMenu);
+		this.popup.add(this.settingsItem);
+		this.popup.add(this.idokepHuItem);
+		this.popup.add(this.exitItem);
+		this.popup.setEnabled(true);
 	}
 
 	/**
-	 * Ha új ellenõrzés futott le, ez a függvény beállítja a legutóbbi frissítés
-	 * idõpontját a tooltip-ben.
+	 * Ha új ellenõrzés futott le, ezt a függvényt meghívva beállítja a
+	 * legutóbbi frissítés idõpontját a tooltip-ben.
 	 */
 	public void weatherUpdated() {
 		Calendar now = Calendar.getInstance();
@@ -175,7 +211,7 @@ public class SysTray implements ActionListener {
 			Desktop.getDesktop().browse(new URL(urlString).toURI());
 		} catch (Exception e) {
 			this.showAlert("Hiba!", "Nem sikerült megnyitni a böngészõt.",
-					TrayIcon.MessageType.WARNING);
+					TrayIcon.MessageType.ERROR);
 		}
 	}
 

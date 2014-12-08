@@ -211,7 +211,9 @@ public class HofigyeloController {
 	 * Azonnal frissíti a jelentéseket.
 	 */
 	public void refreshReportsNow() {
-		this.reportCollector.gatherData();
+		synchronized (this.reportCollector.getT()) {
+			this.reportCollector.getT().notify();
+		}
 	}
 
 	/**

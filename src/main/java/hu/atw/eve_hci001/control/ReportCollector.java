@@ -54,25 +54,34 @@ public class ReportCollector implements Runnable {
 	}
 
 	/**
+	 * 
+	 * @return A futtató szál.
+	 */
+	public Thread getT() {
+		return this.t;
+	}
+
+	/**
 	 * Idõjárás jelentések lekérése.
 	 */
 	public void run() {
 		Thread thisThread = Thread.currentThread();
 		while (this.t == thisThread) {
-			try {
-				this.gatherData();
-				Thread.sleep(this.controller.getRefreshInterval());
-			} catch (InterruptedException ie) {
-				/* nem érdekes */
+			this.gatherData();
+			synchronized (this.t) {
+				try {
+					this.t.wait(this.controller.getRefreshInterval());
+				} catch (InterruptedException e) {
+					logger.debug(e.toString());
+				}
 			}
 		}
 	}
 
 	/**
-	 * Begyûjti a szerverrõl az idõjárás jelentéseket.Szinkronizáls, mert
-	 * kívülrõl is meghívható azonnali frissítésre.
+	 * Begyûjti a szerverrõl az idõjárás jelentéseket.
 	 */
-	public synchronized void gatherData() {
+	private void gatherData() {
 		logger.debug("Adatgyûjtés");
 		this.weatherReports.clear();
 		try {

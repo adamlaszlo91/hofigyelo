@@ -6,10 +6,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -185,7 +188,8 @@ public class ConfigManager {
 		System.out.println("Fájlba írás");
 		BufferedWriter bw = null;
 		try {
-			bw = new BufferedWriter(new FileWriter(this.configFilePath));
+			bw = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(this.configFilePath), "UTF-8"));
 			bw.write("# értesítés\n");
 			bw.write("CONFIG_notifyRequiested = "
 					+ (this.notifyRequiested ? "1" : "0") + "\n");
@@ -229,7 +233,8 @@ public class ConfigManager {
 	private synchronized String readConfigFile() throws IOException {
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(this.configFilePath));
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(
+					this.configFilePath), "UTF-8"));
 			StringBuilder builder = new StringBuilder();
 			String file = "";
 			while ((file = br.readLine()) != null) {

@@ -1,4 +1,4 @@
-package hu.atw.eve_hci001.model;
+package hu.atw.eve_hci001.control;
 
 import hu.atw.eve_hci001.model.exception.MalformedConfigFileException;
 
@@ -70,6 +70,7 @@ public class ConfigManager {
 		this.watchedTypes.put("hózivatar", true);
 		this.watchedTypes.put("jégesõ", false);
 		this.watchedTypes.put("pára", false);
+		this.watchedTypes.put("zápor", false);
 		/* konfigurációs fájl elérhetõségének vizsgálata */
 		try {
 			FileReader fr = new FileReader(this.configFilePath);

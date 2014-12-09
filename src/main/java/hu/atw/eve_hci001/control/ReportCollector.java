@@ -1,6 +1,5 @@
 package hu.atw.eve_hci001.control;
 
-import hu.atw.eve_hci001.model.ConfigManager;
 import hu.atw.eve_hci001.model.WeatherReport;
 
 import java.awt.TrayIcon;

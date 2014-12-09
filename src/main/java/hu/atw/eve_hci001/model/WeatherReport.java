@@ -1,9 +1,9 @@
 package hu.atw.eve_hci001.model;
 
 /**
- * Egy idıj·r·s bejelentÈst reprezent·lo oszt·ly.
+ * Egy id≈ëj√°r√°s bejelent√©st reprezent√°lo oszt√°ly.
  * 
- * @author ¡d·m L·szlÛ
+ * @author √Åd√°m L√°szl√≥
  * 
  */
 public class WeatherReport {
@@ -26,7 +26,7 @@ public class WeatherReport {
 
 	/**
 	 * 
-	 * @return Az idıj·r·s jelentÈs tÌpusa.
+	 * @return Az id≈ëj√°r√°s jelent√©s t√≠pusa.
 	 */
 	public String getType() {
 		return type;
@@ -35,7 +35,7 @@ public class WeatherReport {
 	/**
 	 * 
 	 * @param type
-	 *            At idıj·r·s jelentÈs tÌpusa.
+	 *            At id≈ëj√°r√°s jelent√©s t√≠pusa.
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -43,7 +43,7 @@ public class WeatherReport {
 
 	/**
 	 * 
-	 * @return A jelentÈs helye.
+	 * @return A jelent√©s helye.
 	 */
 	public String getLocation() {
 		return location;
@@ -52,7 +52,7 @@ public class WeatherReport {
 	/**
 	 * 
 	 * @param location
-	 *            A jelentÈs helye.
+	 *            A jelent√©s helye.
 	 */
 	public void setLocation(String location) {
 		this.location = location;
@@ -60,7 +60,7 @@ public class WeatherReport {
 
 	/**
 	 * 
-	 * @return A bejelentÈs ideje.
+	 * @return A bejelent√©s ideje.
 	 */
 	public String getTime() {
 		return time;
@@ -69,7 +69,7 @@ public class WeatherReport {
 	/**
 	 * 
 	 * @param time
-	 *            A bejelentÈs ideje.
+	 *            A bejelent√©s ideje.
 	 */
 	public void setTime(String time) {
 		this.time = time;
@@ -77,7 +77,7 @@ public class WeatherReport {
 
 	/**
 	 * 
-	 * @return A bejelentı neve.
+	 * @return A bejelent≈ë neve.
 	 */
 	public String getUser() {
 		return user;
@@ -86,7 +86,7 @@ public class WeatherReport {
 	/**
 	 * 
 	 * @param user
-	 *            A bejelentı neve.
+	 *            A bejelent≈ë neve.
 	 */
 	public void setUser(String user) {
 		this.user = user;
@@ -94,7 +94,7 @@ public class WeatherReport {
 
 	/**
 	 * 
-	 * @return A hımÈrsÈklet Celsius fokban.
+	 * @return A h≈ëm√©rs√©klet Celsius fokban.
 	 */
 	public String getDegree() {
 		return degree;
@@ -103,7 +103,7 @@ public class WeatherReport {
 	/**
 	 * 
 	 * @param degree
-	 *            A hımÈrsÈklet Celsius fokban.
+	 *            A h≈ëm√©rs√©klet Celsius fokban.
 	 */
 	public void setDegree(String degree) {
 		this.degree = degree;

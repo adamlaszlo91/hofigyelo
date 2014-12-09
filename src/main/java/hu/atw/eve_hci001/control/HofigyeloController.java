@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Controller oszt·ly a HÛfigyelıhˆz.
+ * Controller oszt√°ly a H√≥figyel≈ëh√∂z.
  * 
- * @author ¡d·m L·szlÛ
+ * @author √Åd√°m L√°szl√≥
  * 
  */
 public class HofigyeloController {
@@ -29,11 +29,11 @@ public class HofigyeloController {
 	public HofigyeloController() {
 		this.sysTray = new SysTray(this);
 		this.configManager = new ConfigManager("./hofigyelo.ini");
-		/* konfigur·siÛd f·jl beolvas·sa */
+		/* konfigur√°si√≥d f√°jl beolvas√°sa */
 		if (!this.configManager.isConfigFileAvailable()) {
 			this.showAlert(
 					"Figyelem!",
-					"A konfigur·ciÛs f·jl nem tal·lhatÛ. Az alapÈrtelmezett be·llÌt·sok ker¸lnek haszn·latra.",
+					"A konfigur√°ci√≥s f√°jl nem tal√°lhat√≥. Az alap√©rtelmezett be√°ll√≠t√°sok ker√ºlnek haszn√°latra.",
 					TrayIcon.MessageType.WARNING);
 		} else {
 			try {
@@ -41,12 +41,12 @@ public class HofigyeloController {
 			} catch (IOException e) {
 				this.showAlert(
 						"Figyelem!",
-						"A konfigur·ciÛs f·jl olvas·sa sikertelen. Az alapÈrtelmezett be·llÌt·sok ker¸lnek haszn·latra.",
+						"A konfigur√°ci√≥s f√°jl olvas√°sa sikertelen. Az alap√©rtelmezett be√°ll√≠t√°sok ker√ºlnek haszn√°latra.",
 						TrayIcon.MessageType.WARNING);
 			} catch (MalformedConfigFileException e) {
 				this.showAlert(
 						"Figyelem!",
-						"Hib·s konfigur·ciÛs f·jl. Az alapÈrtelmezett be·llÌt·sok ker¸lnek haszn·latra.",
+						"Hib√°s konfigur√°ci√≥s f√°jl. Az alap√©rtelmezett be√°ll√≠t√°sok ker√ºlnek haszn√°latra.",
 						TrayIcon.MessageType.WARNING);
 			}
 		}
@@ -57,10 +57,10 @@ public class HofigyeloController {
 	}
 
 	/**
-	 * FrissÌti a t·rolja idıj·r·s jelentÈseket.
+	 * Friss√≠ti a t√°rolja id≈ëj√°r√°s jelent√©seket.
 	 * 
 	 * @param newWeatherReports
-	 *            A friss idıj·r·s jelentÈsek list·ja.
+	 *            A friss id≈ëj√°r√°s jelent√©sek list√°ja.
 	 */
 	public void refreshReports(ArrayList<WeatherReport> newWeatherReports) {
 		ArrayList<WeatherReport> reportsToBeShown = new ArrayList<WeatherReport>();
@@ -68,13 +68,13 @@ public class HofigyeloController {
 		for (WeatherReport weatherReport : newWeatherReports) {
 			Boolean isWatched = this.configManager.isWatchedType(weatherReport
 					.getType());
-			/* ismeretlen/˙j idıj·r·s ·llapot */
+			/* ismeretlen/√∫j id≈ëj√°r√°s √°llapot */
 			if (isWatched == null) {
-				this.showAlert("Figyelem!", "Ismeretlen idıj·r·s ·llapot: \""
+				this.showAlert("Figyelem!", "Ismeretlen id≈ëj√°r√°s √°llapot: \""
 						+ weatherReport.getType()
-						+ "\"\nKÈrem, jelezze a fejlesztınek!",
+						+ "\"\nK√©rem, jelezze a fejleszt≈ënek!",
 						TrayIcon.MessageType.WARNING);
-				/* figyelt idıj·r·s ·llapot */
+				/* figyelt id≈ëj√°r√°s √°llapot */
 			} else if (isWatched) {
 				reportsToBeShown.add(weatherReport);
 				if (!this.lastShownWeatherReports.contains(weatherReport)) {
@@ -86,22 +86,22 @@ public class HofigyeloController {
 		}
 		this.sysTray.refreshSnowReports(reportsToBeShown);
 		this.sysTray.weatherUpdated();
-		/* jelentÈsek ·tm·sol·sa a helyi list·ba */
+		/* jelent√©sek √°tm√°sol√°sa a helyi list√°ba */
 		this.lastShownWeatherReports.clear();
 		for (WeatherReport weatherReport : reportsToBeShown) {
 			this.lastShownWeatherReports.add(weatherReport);
 		}
 		if (this.configManager.isNotifyRequiested() && !tooltipText.equals(""))
-			this.showAlert("⁄j jelentÈs(ek)", tooltipText,
+			this.showAlert("√öj jelent√©s(ek)", tooltipText,
 					TrayIcon.MessageType.INFO);
 	}
 
 	/**
-	 * Be·llÌtja, hogy megjelenjen-e ÈrtesÌtÈs ˙j jelentÈsrıl. "Be·llÌt·sok"
-	 * ablkalbÛl valÛ be·llÌt·s esetÈn hÌvÛdik meg.
+	 * Be√°ll√≠tja, hogy megjelenjen-e √©rtes√≠t√©s √∫j jelent√©sr≈ël. "Be√°ll√≠t√°sok"
+	 * ablkalb√≥l val√≥ be√°ll√≠t√°s eset√©n h√≠v√≥dik meg.
 	 * 
 	 * @param notifyRequiested
-	 *            Megjelenjen-e ÈrtesÌtÈs.
+	 *            Megjelenjen-e √©rtes√≠t√©s.
 	 */
 	public void setNotifyRequiestedFromPanel(boolean notifyRequiested) {
 		this.configManager.setNotifyRequiested(notifyRequiested);
@@ -109,11 +109,11 @@ public class HofigyeloController {
 	}
 
 	/**
-	 * Be·llÌtja, hogy megjelenjen-e ÈrtesÌtÈs ˙j jelentÈsrıl. Men¸bıl valÛ
-	 * be·llÌt·s esetÈn hÌvÛdik meg.
+	 * Be√°ll√≠tja, hogy megjelenjen-e √©rtes√≠t√©s √∫j jelent√©sr≈ël. Men√ºb≈ël val√≥
+	 * be√°ll√≠t√°s eset√©n h√≠v√≥dik meg.
 	 * 
 	 * @param notifyRequiested
-	 *            Megjelenjen-e ÈrtesÌtÈs.
+	 *            Megjelenjen-e √©rtes√≠t√©s.
 	 */
 	public void setNotifyRequiestedFromMenu(boolean notifyRequiested) {
 		this.configManager.setNotifyRequiested(notifyRequiested);
@@ -123,36 +123,36 @@ public class HofigyeloController {
 	}
 
 	/**
-	 * MegjelenÌt egy felugrÛ ÈrtesÌtÈst.
+	 * Megjelen√≠t egy felugr√≥ √©rtes√≠t√©st.
 	 * 
 	 * @param title
-	 *            Az ÈrtesÌtÈs cÌme.
+	 *            Az √©rtes√≠t√©s c√≠me.
 	 * 
 	 * @param text
-	 *            Az ÈrtesÌtÈs szˆvege.
+	 *            Az √©rtes√≠t√©s sz√∂vege.
 	 * @param mType
-	 *            Az ÈrtesÌtÈs tÌpusa.
+	 *            Az √©rtes√≠t√©s t√≠pusa.
 	 */
 	public void showAlert(String title, String text, TrayIcon.MessageType mType) {
 		this.sysTray.showAlert(title, text, mType);
 	}
 
 	/**
-	 * A be·llÌt·sokat tartalmatÛ ablak megjelenÌtÈse.
+	 * A be√°ll√≠t√°sokat tartalmat√≥ ablak megjelen√≠t√©se.
 	 */
 	public void showSettingsPanel() {
 		this.settingsPanel = new SettingsPanel(this);
 	}
 
 	/**
-	 * A be·llÌt·sokat tartalmatÛ ablakot elt·volÌtja.
+	 * A be√°ll√≠t√°sokat tartalmat√≥ ablakot elt√°vol√≠tja.
 	 */
 	public void destroySettingsPanel() {
 		this.settingsPanel = null;
 	}
 
 	/**
-	 * Le·llÌtja a programot.
+	 * Le√°ll√≠tja a programot.
 	 */
 	public void exit() {
 		this.reportCollector.stop();
@@ -161,7 +161,7 @@ public class HofigyeloController {
 	}
 
 	/**
-	 * @return A felhaszn·lÛ kÈrt-e ÈrtesÌtÈst.
+	 * @return A felhaszn√°l√≥ k√©rt-e √©rtes√≠t√©st.
 	 */
 	public boolean isNotifyRequiested() {
 		return this.configManager.isNotifyRequiested();
@@ -169,24 +169,24 @@ public class HofigyeloController {
 
 	/**
 	 * 
-	 * @return A frissÌtÈs gyakoris·ga milliszekundumban.
+	 * @return A friss√≠t√©s gyakoris√°ga milliszekundumban.
 	 */
 	public long getRefreshInterval() {
 		return this.configManager.getRefreshInterval();
 	}
 
 	/**
-	 * @return A figyelt idıj·r·si ·llapotok Ès st·tuszuk.
+	 * @return A figyelt id≈ëj√°r√°si √°llapotok √©s st√°tuszuk.
 	 */
 	public HashMap<String, Boolean> getWatchedTypes() {
 		return this.configManager.getWatchedTypes();
 	}
 
 	/**
-	 * Be·llÌtja, hogy egy adott idıj·r·si ·llapotot figyeljen-e a program.
+	 * Be√°ll√≠tja, hogy egy adott id≈ëj√°r√°si √°llapotot figyeljen-e a program.
 	 * 
 	 * @param weatherType
-	 *            Az idıj·r·si ·llapot typusa.
+	 *            Az id≈ëj√°r√°si √°llapot typusa.
 	 * @param b
 	 *            Figyelje-e.
 	 */
@@ -195,19 +195,19 @@ public class HofigyeloController {
 	}
 
 	/**
-	 * Az aktu·lis be·llÌt·sok konfigur·ciÛs f·jlba valÛ Ìr·sa.
+	 * Az aktu√°lis be√°ll√≠t√°sok konfigur√°ci√≥s f√°jlba val√≥ √≠r√°sa.
 	 */
 	public void writeSettings() {
 		try {
 			this.configManager.writeConfigFile();
 		} catch (IOException e) {
-			this.showAlert("Hiba!", "A be·llÌt·sok mentÈse sikertelen.",
+			this.showAlert("Hiba!", "A be√°ll√≠t√°sok ment√©se sikertelen.",
 					TrayIcon.MessageType.ERROR);
 		}
 	}
 
 	/**
-	 * Azonnal frissÌti a jelentÈseket.
+	 * Azonnal friss√≠ti a jelent√©seket.
 	 */
 	public void refreshReportsNow() {
 		synchronized (this.reportCollector.getT()) {
@@ -218,7 +218,7 @@ public class HofigyeloController {
 	/**
 	 * 
 	 * @param refreshInterval
-	 *            A frissÌtÈs gyakoris·ga milliszekundumban.
+	 *            A friss√≠t√©s gyakoris√°ga milliszekundumban.
 	 */
 	public void setRefreshInterval(long refreshInterval) {
 		this.configManager.setRefreshInterval(refreshInterval);

@@ -24,9 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 /**
- * Be·llÌt·sokat tartalmazÛ ablakot megjelenÌtı oszt·ly.
+ * Be√°ll√≠t√°sokat tartalmaz√≥ ablakot megjelen√≠t≈ë oszt√°ly.
  * 
- * @author L·szlÛ ¡d·m
+ * @author L√°szl√≥ √Åd√°m
  * 
  */
 public class SettingsPanel implements ActionListener {
@@ -41,14 +41,14 @@ public class SettingsPanel implements ActionListener {
 	private JFrame frame;
 
 	/**
-	 * Konstruktor. Inicializ·lja a grafikus elemeket.
+	 * Konstruktor. Inicializ√°lja a grafikus elemeket.
 	 * 
 	 * @param controller
 	 *            A controller objektum.
 	 */
 	public SettingsPanel(HofigyeloController controller) {
 		this.controller = controller;
-		this.frame = new JFrame("Be·llÌt·sok - HÛfigyelı");
+		this.frame = new JFrame("Be√°ll√≠t√°sok - H√≥figyel≈ë");
 		Image image = new ImageIcon(ConfigManager.getImage("snowflake.png"))
 				.getImage();
 		frame.setIconImage(image);
@@ -59,7 +59,7 @@ public class SettingsPanel implements ActionListener {
 			}
 		});
 
-		/* tab Ès gomb mezık */
+		/* tab √©s gomb mez≈ëk */
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new BorderLayout());
 		this.frame.getContentPane().add(topPanel, BorderLayout.CENTER);
@@ -67,11 +67,11 @@ public class SettingsPanel implements ActionListener {
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		this.frame.getContentPane().add(buttonsPanel, BorderLayout.PAGE_END);
-		this.applyButton = new JButton("MegjegyzÈs");
+		this.applyButton = new JButton("Megjegyz√©s");
 		this.applyButton.addActionListener(this);
 		this.applyButton.setEnabled(false);
 		buttonsPanel.add(applyButton);
-		this.closeButton = new JButton("Bez·r");
+		this.closeButton = new JButton("Bez√°r");
 		this.closeButton.addActionListener(this);
 		buttonsPanel.add(this.closeButton);
 
@@ -81,8 +81,8 @@ public class SettingsPanel implements ActionListener {
 		JPanel infoTab = this.createInfoTab();
 
 		JTabbedPane tabs = new JTabbedPane();
-		tabs.addTab("FrissÌtÈs", refreshSettingsTab);
-		tabs.addTab("FigyelÈs", watchedSettingsTab);
+		tabs.addTab("Friss√≠t√©s", refreshSettingsTab);
+		tabs.addTab("Figyel√©s", watchedSettingsTab);
 		tabs.addTab("Info", infoTab);
 		topPanel.add(tabs);
 
@@ -96,7 +96,7 @@ public class SettingsPanel implements ActionListener {
 		if (e.getSource() instanceof JCheckBox) {
 			JCheckBox checkBox = (JCheckBox) e.getSource();
 			if (checkBox.getMnemonic() == KeyEvent.VK_SEMICOLON) {
-				// egy idıj·r·s tÌpus figyelÈse v·ltozott
+				// egy id≈ëj√°r√°s t√≠pus figyel√©se v√°ltozott
 				this.controller.modifyWatchedType(checkBox.getText(),
 						checkBox.isSelected());
 				this.applyButton.setEnabled(true);
@@ -105,29 +105,29 @@ public class SettingsPanel implements ActionListener {
 						.getSource()).isSelected());
 				this.applyButton.setEnabled(true);
 			}
-			/* ablak bez·s·ra */
+			/* ablak bez√°s√°ra */
 		} else if (e.getSource() == this.closeButton) {
 			this.onExit();
-			/* be·llÌt·sok alkalmaz·sa */
+			/* be√°ll√≠t√°sok alkalmaz√°sa */
 		} else if (e.getSource() == this.applyButton) {
 			this.controller.writeSettings();
 			this.applyButton.setEnabled(false);
-			/* frissÌtÈs most */
+			/* friss√≠t√©s most */
 		} else if (e.getSource() == this.refreshNowButton) {
 			this.controller.refreshReportsNow();
-			/* intervallum be·llÌt·sa */
+			/* intervallum be√°ll√≠t√°sa */
 		} else if (e.getSource() == this.intervalBox) {
 			if (this.intervalBox.getSelectedIndex() == -1)
 				return;
 			this.controller.setRefreshInterval(this.intervals[this.intervalBox
 					.getSelectedIndex()]);
 			this.applyButton.setEnabled(true);
-			/* figyelmeztetÈs */
+			/* figyelmeztet√©s */
 		}
 	}
 
 	/**
-	 * FrissÌti a figyelmeztetÈsi be·llÌt·st
+	 * Friss√≠ti a figyelmeztet√©si be√°ll√≠t√°st
 	 */
 	public void refreshNotifySetting() {
 		this.notifyRequiestedBox.setSelected(this.controller
@@ -135,9 +135,9 @@ public class SettingsPanel implements ActionListener {
 	}
 
 	/**
-	 * ElkÈszÌti a figyelÈsi be·llÌt·sok f¸let.
+	 * Elk√©sz√≠ti a figyel√©si be√°ll√≠t√°sok f√ºlet.
 	 * 
-	 * @return A figyelÈsi be·llÌt·sok f¸l.
+	 * @return A figyel√©si be√°ll√≠t√°sok f√ºl.
 	 */
 	private JPanel createWatchedSettingsTab() {
 		JPanel watchedSettingsTab = new JPanel();
@@ -149,8 +149,8 @@ public class SettingsPanel implements ActionListener {
 			JCheckBox checkBox = new JCheckBox(key);
 			checkBox.setSelected(watchedTypes.get(key));
 			/*
-			 * mnemonic alapj·n azonosÌthatÛ, hogy a cehckbox egy idıj·r·s
-			 * tÌpushoz van rendelve
+			 * mnemonic alapj√°n azonos√≠that√≥, hogy a cehckbox egy id≈ëj√°r√°s
+			 * t√≠pushoz van rendelve
 			 */
 			checkBox.setMnemonic(KeyEvent.VK_SEMICOLON);
 			checkBox.addActionListener(this);
@@ -160,24 +160,24 @@ public class SettingsPanel implements ActionListener {
 	}
 
 	/**
-	 * ElkÈszÌti a figyelÈsi be·llÌt·sok f¸let.
+	 * Elk√©sz√≠ti a figyel√©si be√°ll√≠t√°sok f√ºlet.
 	 * 
-	 * @return A figyelÈsi be·llÌt·sok f¸l.
+	 * @return A figyel√©si be√°ll√≠t√°sok f√ºl.
 	 */
 	private JPanel createRefreshSettingsTab() {
 		JPanel refreshSettingsTab = new JPanel();
 		refreshSettingsTab.setLayout(new GridLayout(6, 1));
 		JPanel forComboBox = new JPanel();
 		forComboBox.setLayout(new FlowLayout(FlowLayout.LEFT));
-		JLabel intervalText = new JLabel("FrissÌtÈs gyakoris·ga");
+		JLabel intervalText = new JLabel("Friss√≠t√©s gyakoris√°ga");
 		forComboBox.add(intervalText);
 		this.intervalBox = new JComboBox<String>();
-		this.intervalBox.addItem("30  m·sodperc");
+		this.intervalBox.addItem("30  m√°sodperc");
 		this.intervalBox.addItem("1 perc");
 		this.intervalBox.addItem("5 perc");
 		this.intervalBox.addItem("10 perc");
 		this.intervalBox.addItem("30 perc");
-		this.intervalBox.addItem("1 Ûra");
+		this.intervalBox.addItem("1 √≥ra");
 		for (int i = 0; i < this.intervals.length; i++){
 			if (this.controller.getRefreshInterval() == this.intervals[i]){
 				this.intervalBox.setSelectedIndex(i);
@@ -188,7 +188,7 @@ public class SettingsPanel implements ActionListener {
 		forComboBox.add(this.intervalBox);
 		refreshSettingsTab.add(forComboBox);
 
-		this.notifyRequiestedBox = new JCheckBox("FigyelmeztetÈs");
+		this.notifyRequiestedBox = new JCheckBox("Figyelmeztet√©s");
 		this.notifyRequiestedBox.setSelected(this.controller
 				.isNotifyRequiested());
 		this.notifyRequiestedBox.addActionListener(this);
@@ -196,7 +196,7 @@ public class SettingsPanel implements ActionListener {
 
 		JPanel forRefreshButton = new JPanel();
 		forRefreshButton.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.refreshNowButton = new JButton("FrissÌtÈs most");
+		this.refreshNowButton = new JButton("Friss√≠t√©s most");
 		this.refreshNowButton.addActionListener(this);
 		forRefreshButton.add(this.refreshNowButton);
 		refreshSettingsTab.add(forRefreshButton);
@@ -204,17 +204,17 @@ public class SettingsPanel implements ActionListener {
 	}
 
 	/**
-	 * ElkÈszÌti az info f¸let.
+	 * Elk√©sz√≠ti az info f√ºlet.
 	 * 
-	 * @return Az info f¸l.
+	 * @return Az info f√ºl.
 	 */
 	private JPanel createInfoTab() {
 		JPanel refreshSettingsTab = new JPanel();
 		JLabel infoLabel = new JLabel();
-		String title = "HÛfigyelı 1.0";
+		String title = "H√≥figyel≈ë 1.0";
 		String mail = "adam.laszlo.91@gmail.com";
 		String http = "http://www.http://eve-hci001.atw.hu/";
-		String longInfo = "A program a bejelentÈseket a<br><a href=\"http://www.idokep.hu\">http://www.idokep.hu</a> -rÛl szerzi be.<br>Ezen program nem az emlÌtett oldal hivatalos alkalmaz·sa,<br> Ès a kÈszÌtı nem kÌv·nja sem akÈnt felt¸ntetni,<br> sem kereskedelmi forgalomba hozni.";
+		String longInfo = "A program a bejelent√©seket a<br><a href=\"http://www.idokep.hu\">http://www.idokep.hu</a> -r√≥l szerzi be.<br>Ezen program nem az eml√≠tett oldal hivatalos alkalmaz√°sa,<br> √©s a k√©sz√≠t≈ë nem k√≠v√°nja sem ak√©nt felt√ºntetni,<br> sem kereskedelmi forgalomba hozni.";
 		infoLabel.setText("<html><u>" + title + "</u><br><br><b>e-mail</b>: " + mail
 				+ "<br><b>web:</b> <a href=\"" + http + "\">" + http + "</a><br><br>" + longInfo + "</html>");
 		refreshSettingsTab.add(infoLabel);
@@ -222,7 +222,7 @@ public class SettingsPanel implements ActionListener {
 	}
 
 	/**
-	 * Az ablak bez·r·sa.
+	 * Az ablak bez√°r√°sa.
 	 */
 	private void onExit() {
 		this.frame.setVisible(false);

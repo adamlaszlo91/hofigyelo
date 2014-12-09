@@ -6,6 +6,9 @@
 	<version>1.0</version>
 	<name>Hófigyelő</name>
 	<description>Az idokep.hu információi alapján az időjárás bejelentéseket nyomon követő program.</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>

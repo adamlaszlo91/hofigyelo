@@ -17,9 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Be·llÌt·sokat t·rolÛ Ès konfigur·ciÛs f·jlt kezelı oszt·ly.
+ * Be√°ll√≠t√°sokat t√°rol√≥ √©s konfigur√°ci√≥s f√°jlt kezel≈ë oszt√°ly.
  * 
- * @author ¡d·m L·szlÛ
+ * @author √Åd√°m L√°szl√≥
  * 
  */
 
@@ -35,8 +35,8 @@ public class ConfigManager {
 	 * Konstruktor.
 	 * 
 	 * @param configFilePath
-	 *            A be·llÌt·sokat tartalmazÛ f·jl elÈrÈsi ˙tvonala a resources
-	 *            kˆnyvt·rhoz kÈpes.
+	 *            A be√°ll√≠t√°sokat tartalmaz√≥ f√°jl el√©r√©si √∫tvonala a resources
+	 *            k√∂nyvt√°rhoz k√©pes.
 	 */
 	public ConfigManager(String configFilePath) {
 		this.configFilePath = configFilePath;
@@ -44,34 +44,34 @@ public class ConfigManager {
 		this.refreshInterval = 60000;
 		this.watchedTypes = new HashMap<String, Boolean>();
 		/*
-		 * alapÈrtelmezett inicializ·l·s, hÛval kapcsolatos idıj·r·s esemÈnyek
-		 * figyelÈsÈre
+		 * alap√©rtelmezett inicializ√°l√°s, h√≥val kapcsolatos id≈ëj√°r√°s esem√©nyek
+		 * figyel√©s√©re
 		 */
-		this.watchedTypes.put("der¸lt", false);
-		this.watchedTypes.put("gyengÈn felhıs", false);
-		this.watchedTypes.put("kˆzepesen felhıs", false);
-		this.watchedTypes.put("erısen felhıs", false);
+		this.watchedTypes.put("der√ºlt", false);
+		this.watchedTypes.put("gyeng√©n felh≈ës", false);
+		this.watchedTypes.put("k√∂zepesen felh≈ës", false);
+		this.watchedTypes.put("er≈ësen felh≈ës", false);
 		this.watchedTypes.put("borult", false);
-		this.watchedTypes.put("szit·l·s", false);
-		this.watchedTypes.put("gyenge esı", false);
-		this.watchedTypes.put("esı", false);
-		this.watchedTypes.put("Ûnos esı", false);
-		this.watchedTypes.put("z·poresı", false);
-		this.watchedTypes.put("havasesı", true);
-		this.watchedTypes.put("hÛsz·llingÛz·s", true);
-		this.watchedTypes.put("havaz·s", true);
-		this.watchedTypes.put("intenzÌv havaz·s", true);
-		this.watchedTypes.put("hÛf˙v·s", true);
-		this.watchedTypes.put("hÛz·por", true);
-		this.watchedTypes.put("p·r·ss·g", false);
-		this.watchedTypes.put("kˆd", false);
-		this.watchedTypes.put("sz·raz zivatar", false);
+		this.watchedTypes.put("szit√°l√°s", false);
+		this.watchedTypes.put("gyenge es≈ë", false);
+		this.watchedTypes.put("es≈ë", false);
+		this.watchedTypes.put("√≥nos es≈ë", false);
+		this.watchedTypes.put("z√°pores≈ë", false);
+		this.watchedTypes.put("havases≈ë", true);
+		this.watchedTypes.put("h√≥sz√°lling√≥z√°s", true);
+		this.watchedTypes.put("havaz√°s", true);
+		this.watchedTypes.put("intenz√≠v havaz√°s", true);
+		this.watchedTypes.put("h√≥f√∫v√°s", true);
+		this.watchedTypes.put("h√≥z√°por", true);
+		this.watchedTypes.put("p√°r√°ss√°g", false);
+		this.watchedTypes.put("k√∂d", false);
+		this.watchedTypes.put("sz√°raz zivatar", false);
 		this.watchedTypes.put("zivatar", false);
-		this.watchedTypes.put("hÛzivatar", true);
-		this.watchedTypes.put("jÈgesı", false);
-		this.watchedTypes.put("p·ra", false);
-		this.watchedTypes.put("z·por", false);
-		/* konfigur·ciÛs f·jl elÈrhetısÈgÈnek vizsg·lata */
+		this.watchedTypes.put("h√≥zivatar", true);
+		this.watchedTypes.put("j√©ges≈ë", false);
+		this.watchedTypes.put("p√°ra", false);
+		this.watchedTypes.put("z√°por", false);
+		/* konfigur√°ci√≥s f√°jl el√©rhet≈ës√©g√©nek vizsg√°lata */
 		try {
 			FileReader fr = new FileReader(this.configFilePath);
 			fr.close();
@@ -79,13 +79,13 @@ public class ConfigManager {
 		} catch (FileNotFoundException fnfe) {
 			this.configFileAvailable = false;
 		} catch (IOException ioe) {
-			/* valami problÈma lehet a f·jlkezelÈssel */
+			/* valami probl√©ma lehet a f√°jlkezel√©ssel */
 			this.configFileAvailable = false;
 		}
 	}
 
 	/**
-	 * @return A felhaszn·lÛ kÈrt-e ÈrtesÌtÈst.
+	 * @return A felhaszn√°l√≥ k√©rt-e √©rtes√≠t√©st.
 	 */
 	public boolean isNotifyRequiested() {
 		return notifyRequiested;
@@ -94,16 +94,16 @@ public class ConfigManager {
 	/**
 	 * 
 	 * @param notifyRequiested
-	 *            A felhaszn·lÛ kÈr-e ÈrtesÌtÈst.
+	 *            A felhaszn√°l√≥ k√©r-e √©rtes√≠t√©st.
 	 */
 	public void setNotifyRequiested(boolean notifyRequiested) {
-		logger.debug("Be·llÌt·s: " + notifyRequiested);
+		logger.debug("Be√°ll√≠t√°s: " + notifyRequiested);
 		this.notifyRequiested = notifyRequiested;
 	}
 
 	/**
 	 * 
-	 * @return A frissÌtÈs gyakoris·ga milliszekundumban.
+	 * @return A friss√≠t√©s gyakoris√°ga milliszekundumban.
 	 */
 	public long getRefreshInterval() {
 		return refreshInterval;
@@ -112,34 +112,34 @@ public class ConfigManager {
 	/**
 	 * 
 	 * @param refreshInterval
-	 *            A frissÌtÈs gyakoris·ga milliszekundumban.
+	 *            A friss√≠t√©s gyakoris√°ga milliszekundumban.
 	 */
 	public void setRefreshInterval(long refreshInterval) {
-		logger.debug("Be·llÌt·s: " + refreshInterval + " ms");
+		logger.debug("Be√°ll√≠t√°s: " + refreshInterval + " ms");
 		this.refreshInterval = refreshInterval;
 	}
 
 	/**
 	 * 
-	 * @return ElÈrhetı-e a konfigur·ciÛs f·jl.
+	 * @return El√©rhet≈ë-e a konfigur√°ci√≥s f√°jl.
 	 */
 	public boolean isConfigFileAvailable() {
 		return configFileAvailable;
 	}
 
 	/**
-	 * @return A figyelt idıj·r·si ·llapotok Ès st·tuszuk.
+	 * @return A figyelt id≈ëj√°r√°si √°llapotok √©s st√°tuszuk.
 	 */
 	public HashMap<String, Boolean> getWatchedTypes() {
 		return watchedTypes;
 	}
 
 	/**
-	 * Ellenırzi, hogy egy adott idıj·r·si ·llaptot figyel-e a felhaszn·lÛ.
+	 * Ellen≈ërzi, hogy egy adott id≈ëj√°r√°si √°llaptot figyel-e a felhaszn√°l√≥.
 	 * 
 	 * @param type
-	 *            Az idıj·r·si ·llapot.
-	 * @return True, ha figyelt, False, ha nem Ès null, ha ismeretlen idıj·r·si
+	 *            Az id≈ëj√°r√°si √°llapot.
+	 * @return True, ha figyelt, False, ha nem √©s null, ha ismeretlen id≈ëj√°r√°si
 	 *         viszony.
 	 */
 	public Boolean isWatchedType(String type) {
@@ -149,21 +149,21 @@ public class ConfigManager {
 	}
 
 	/**
-	 * Be·llÌtja, hogy egy adott idıj·r·si ·llapotot figyeljen-e a program.
+	 * Be√°ll√≠tja, hogy egy adott id≈ëj√°r√°si √°llapotot figyeljen-e a program.
 	 * 
 	 * @param weatherType
-	 *            Az idıj·r·si ·llapot typusa.
+	 *            Az id≈ëj√°r√°si √°llapot typusa.
 	 * @param b
 	 *            Figyelje-e.
 	 */
 	public void modifyWatchedType(String weatherType, boolean b) {
-		logger.debug("Be·llÌt·s: " + weatherType + " = " + b);
+		logger.debug("Be√°ll√≠t√°s: " + weatherType + " = " + b);
 		this.watchedTypes.put(weatherType, b);
 	}
 
 	/**
-	 * FrissÌti a t·rolt be·llÌt·sokat a konfigur·ciÛs f·jl alapj·n. Ha az nem
-	 * elÈrhetıkÈnt lett meg·llapÌtva az oszt·ly lÈtrehoz·sakor, nem csin·l
+	 * Friss√≠ti a t√°rolt be√°ll√≠t√°sokat a konfigur√°ci√≥s f√°jl alapj√°n. Ha az nem
+	 * el√©rhet≈ëk√©nt lett meg√°llap√≠tva az oszt√°ly l√©trehoz√°sakor, nem csin√°l
 	 * semmit.
 	 */
 	public synchronized void refreshConfig() throws IOException,
@@ -175,23 +175,23 @@ public class ConfigManager {
 	}
 
 	/**
-	 * A jelenlegi be·llÌt·sokat elmenti a konfigur·ciÛs f·jlba, Ès
-	 * elÈrhetısÈgÈt igazra ·llÌtja. Ha elızetesen nem elÈrhetıkÈnt lett
-	 * meg·llapÌtva, a f·jl lÈtrehoz·sra ker¸l.
+	 * A jelenlegi be√°ll√≠t√°sokat elmenti a konfigur√°ci√≥s f√°jlba, √©s
+	 * el√©rhet≈ës√©g√©t igazra √°ll√≠tja. Ha el≈ëzetesen nem el√©rhet≈ëk√©nt lett
+	 * meg√°llap√≠tva, a f√°jl l√©trehoz√°sra ker√ºl.
 	 * 
 	 * @throws IOException
 	 */
 	public synchronized void writeConfigFile() throws IOException {
-		System.out.println("F·jlba Ìr·s");
+		System.out.println("F√°jlba √≠r√°s");
 		BufferedWriter bw = null;
 		try {
 			bw = new BufferedWriter(new FileWriter(this.configFilePath));
-			bw.write("# ÈrtesÌtÈs\n");
+			bw.write("# √©rtes√≠t√©s\n");
 			bw.write("CONFIG_notifyRequiested = "
 					+ (this.notifyRequiested ? "1" : "0") + "\n");
-			bw.write("# ÈrtesÌtÈs idızÌtÈse\n");
+			bw.write("# √©rtes√≠t√©s id≈ëz√≠t√©se\n");
 			bw.write("CONFIG_refreshInterval = " + this.refreshInterval + "\n");
-			bw.write("# figyelt jelentÈsek\n");
+			bw.write("# figyelt jelent√©sek\n");
 			for (String key : this.watchedTypes.keySet()) {
 				bw.write(key.replace(" ", "_") + " = "
 						+ (watchedTypes.get(key) ? "1" : "0") + "\n");
@@ -208,11 +208,11 @@ public class ConfigManager {
 	}
 
 	/**
-	 * Visszaad egy kÈp erısoffr·s f·jlt Image objektumkÈnt.
+	 * Visszaad egy k√©p er≈ëforr√°s f√°jlt Image objektumk√©nt.
 	 * 
 	 * @param pathAndFileName
-	 *            At kÈp elÈrÈsi ˙tja.
-	 * @return A kÈp Image objektumkÈnt.
+	 *            At k√©p el√©r√©si √∫tja.
+	 * @return A k√©p Image objektumk√©nt.
 	 */
 	public static Image getImage(String pathAndFileName) {
 		URL url = Thread.currentThread().getContextClassLoader()
@@ -221,9 +221,9 @@ public class ConfigManager {
 	}
 
 	/**
-	 * Beolvassa a konfigur·ciÛs f·jl tartalm·t.
+	 * Beolvassa a konfigur√°ci√≥s f√°jl tartalm√°t.
 	 * 
-	 * @return A konfigur·ciÛs f·jl szˆveges tartalma.
+	 * @return A konfigur√°ci√≥s f√°jl sz√∂veges tartalma.
 	 * @throws IOException
 	 */
 	private synchronized String readConfigFile() throws IOException {
@@ -248,10 +248,10 @@ public class ConfigManager {
 	}
 
 	/**
-	 * A konfigur·ciÛs f·jl szˆveges tartama alapj·n frissÌti a be·llÌt·sokat.
+	 * A konfigur√°ci√≥s f√°jl sz√∂veges tartama alapj√°n friss√≠ti a be√°ll√≠t√°sokat.
 	 * 
 	 * @param configText
-	 *            A konfigur·ciÛs f·jl szˆveges tartama.
+	 *            A konfigur√°ci√≥s f√°jl sz√∂veges tartama.
 	 * @throws MalformedConfigFileException
 	 */
 	private void buildConfig(String configText)

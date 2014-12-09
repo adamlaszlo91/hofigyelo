@@ -21,9 +21,9 @@ import java.util.Calendar;
 import javax.swing.ImageIcon;
 
 /**
- * Az ÈrtesÌtÈsi ikont kezelı oszt·ly.
+ * Az √©rtes√≠t√©si ikont kezel≈ë oszt√°ly.
  * 
- * @author ¡d·m L·szlÛ
+ * @author √Åd√°m L√°szl√≥
  * 
  */
 public class SysTray implements ActionListener {
@@ -52,10 +52,10 @@ public class SysTray implements ActionListener {
 				.getImage();
 		this.trayIcon = new TrayIcon(image);
 		this.trayIcon.setImageAutoSize(true);
-		this.trayIcon.setToolTip("HÛfigyelı\nFrissÌtve: soha");
-		/* popup men¸ */
+		this.trayIcon.setToolTip("H√≥figyel≈ë\nFriss√≠tve: soha");
+		/* popup men√º */
 		this.popup = new PopupMenu();
-		/* ha t˙l hamar jelenÌtik meg, fennakadhat a program */
+		/* ha t√∫l hamar jelen√≠tik meg, fennakadhat a program */
 		this.popup.setEnabled(false);
 
 		this.currentReportsMenu = new Menu("Jelenleg havazik (0)");
@@ -63,13 +63,13 @@ public class SysTray implements ActionListener {
 
 		this.notificationMenu = new Menu();
 		this.notifyYesNoItem = new MenuItem();
-		this.notificationMenu.setLabel("FigyelmeztetÈs (?)");
+		this.notificationMenu.setLabel("Figyelmeztet√©s (?)");
 		this.notifyYesNoItem.setLabel("?");
 		this.notifyYesNoItem.addActionListener(this);
 		this.notificationMenu.add(this.notifyYesNoItem);
 		this.popup.add(this.notificationMenu);
 
-		this.settingsItem = new MenuItem("Be·llÌt·sok");
+		this.settingsItem = new MenuItem("Be√°ll√≠t√°sok");
 		this.settingsItem.addActionListener(this);
 		this.popup.add(this.settingsItem);
 
@@ -77,7 +77,7 @@ public class SysTray implements ActionListener {
 		this.idokepHuItem.addActionListener(this);
 		popup.add(idokepHuItem);
 
-		this.exitItem = new MenuItem("KilÈpÈs");
+		this.exitItem = new MenuItem("Kil√©p√©s");
 		this.exitItem.addActionListener(this);
 		this.popup.add(exitItem);
 
@@ -86,26 +86,26 @@ public class SysTray implements ActionListener {
 		try {
 			this.tray.add(this.trayIcon);
 		} catch (AWTException e) {
-			/* ha nem jelenik meg, azt ˙gyis l·tjuk */
+			/* ha nem jelenik meg, azt √∫gyis l√°tjuk */
 		}
 		this.popup.setEnabled(true);
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		/* kilÈpÈs */
+		/* kil√©p√©s */
 		if (e.getSource() == this.exitItem) {
 			this.controller.exit();
 			/* idokep.hu link */
 		} else if (e.getSource() == this.idokepHuItem) {
 			this.openWebpage("http://www.idokep.hu/idokep");
-			/* ÈrtesÌtÈs tilt·sa/engedÈlyezÈse */
+			/* √©rtes√≠t√©s tilt√°sa/enged√©lyez√©se */
 		} else if (e.getSource() == this.notifyYesNoItem) {
 			if (this.controller.isNotifyRequiested()) {
-				this.notificationMenu.setLabel("FigyelmeztetÈs (Kikapcsolva)");
+				this.notificationMenu.setLabel("Figyelmeztet√©s (Kikapcsolva)");
 				this.notifyYesNoItem.setLabel("Bekapcsol");
 				this.controller.setNotifyRequiestedFromMenu(false);
 			} else {
-				this.notificationMenu.setLabel("FigyelmeztetÈs (Bekapcsolva)");
+				this.notificationMenu.setLabel("Figyelmeztet√©s (Bekapcsolva)");
 				this.notifyYesNoItem.setLabel("Kikapcsol");
 				this.controller.setNotifyRequiestedFromMenu(true);
 			}
@@ -115,23 +115,23 @@ public class SysTray implements ActionListener {
 	}
 
 	/**
-	 * Elt·volÌtja az ÈrtesÌtÈsi ikont.
+	 * Elt√°vol√≠tja az √©rtes√≠t√©si ikont.
 	 */
 	public void remove() {
 		this.tray.remove(this.trayIcon);
 	}
 
 	/**
-	 * FrissÌti a FigyelmeztetÈs men¸pontot.
+	 * Friss√≠ti a Figyelmeztet√©s men√ºpontot.
 	 */
 	public void refreshShownSettings() {
 		this.popup.setEnabled(false);
 		this.popup.removeAll();
 		if (this.controller.isNotifyRequiested()) {
-			this.notificationMenu.setLabel("FigyelmeztetÈs (Bekapcsolva)");
+			this.notificationMenu.setLabel("Figyelmeztet√©s (Bekapcsolva)");
 			this.notifyYesNoItem.setLabel("Kikapcsol");
 		} else {
-			this.notificationMenu.setLabel("FigyelmeztetÈs (Kikapcsolva)");
+			this.notificationMenu.setLabel("Figyelmeztet√©s (Kikapcsolva)");
 			this.notifyYesNoItem.setLabel("Bekapcsol");
 		}
 		this.popup.add(this.currentReportsMenu);
@@ -143,25 +143,25 @@ public class SysTray implements ActionListener {
 	}
 
 	/**
-	 * FrissÌti a men¸bıl elÈrhetÛ jelentÈseket.
+	 * Friss√≠ti a men√ºb≈ël el√©rhet√≥ jelent√©seket.
 	 * 
 	 * @param weatherReports
-	 *            Az ˙j jelentÈsek.
+	 *            Az √∫j jelent√©sek.
 	 */
 	public void refreshSnowReports(ArrayList<WeatherReport> weatherReports) {
 		this.reportCounter = 0;
-		/* nem engedi bekˆvetkezni az update-mikˆzben-l·thatÛ problÈmat */
+		/* nem engedi bek√∂vetkezni az update-mik√∂zben-l√°that√≥ probl√©mat */
 		this.popup.setEnabled(false);
 		this.popup.removeAll();
 		this.currentReportsMenu.removeAll();
 		for (WeatherReport weatherReport : weatherReports) {
-			MenuItem snowItem = new MenuItem(weatherReport.getType() + " - "
+			MenuItem reportItem = new MenuItem(weatherReport.getType() + " - "
 					+ weatherReport.getLocation() + ", "
 					+ weatherReport.getTime());
-			this.currentReportsMenu.add(snowItem);
+			this.currentReportsMenu.add(reportItem);
 			this.reportCounter++;
 		}
-		this.currentReportsMenu.setLabel("JelentÈsek (" + this.reportCounter
+		this.currentReportsMenu.setLabel("Jelent√©sek (" + this.reportCounter
 				+ ")");
 		this.popup.add(this.currentReportsMenu);
 		this.popup.add(this.notificationMenu);
@@ -172,8 +172,8 @@ public class SysTray implements ActionListener {
 	}
 
 	/**
-	 * Ha ˙j ellenırzÈs futott le, ezt a f¸ggvÈnyt meghÌvva be·llÌtja a
-	 * legutÛbbi frissÌtÈs idıpontj·t a tooltip-ben.
+	 * Ha √∫j ellen≈ërz√©s futott le, ezt a f√ºggv√©nyt megh√≠vva be√°ll√≠tja a
+	 * legut√≥bbi friss√≠t√©s id≈ëpontj√°t a tooltip-ben.
 	 */
 	public void weatherUpdated() {
 		Calendar now = Calendar.getInstance();
@@ -186,22 +186,22 @@ public class SysTray implements ActionListener {
 			minString = "" + min;
 		}
 		String time = ("" + hour + ":" + minString);
-		this.trayIcon.setToolTip("HÛfigyelı\nFrissÌtve: " + time);
+		this.trayIcon.setToolTip("H√≥figyel≈ë\nFriss√≠tve: " + time);
 	}
 
 	/**
-	 * MegjelenÌt egy ÈrtesÌtÈst felugrÛ buborÈkban.
+	 * Megjelen√≠t egy √©rtes√≠t√©st felugr√≥ bubor√©kban.
 	 * 
 	 * @param text
-	 *            Az ÈrtesÌtÈs szˆvege.
+	 *            Az √©rtes√≠t√©s sz√∂vege.
 	 */
 	public void showAlert(String title, String text, TrayIcon.MessageType mType) {
 		this.trayIcon.displayMessage(title, text, mType);
 	}
 
 	/**
-	 * UtasÌtja a rendszert egy weboldal megnyit·s·ra az alapÈrtelmezett
-	 * bˆgÈyszıvel.
+	 * Utas√≠tja a rendszert egy weboldal megnyit√°s√°ra az alap√©rtelmezett
+	 * b√∂g√©ysz≈ëvel.
 	 * 
 	 * @param urlString
 	 *            A webolda URL-eje.
@@ -210,7 +210,7 @@ public class SysTray implements ActionListener {
 		try {
 			Desktop.getDesktop().browse(new URL(urlString).toURI());
 		} catch (Exception e) {
-			this.showAlert("Hiba!", "Nem siker¸lt megnyitni a bˆngÈszıt.",
+			this.showAlert("Hiba!", "Nem siker√ºlt megnyitni a b√∂ng√©sz≈ët.",
 					TrayIcon.MessageType.ERROR);
 		}
 	}

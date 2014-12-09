@@ -13,9 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Idõjárás jelentések lekérését végzõ szál.
+ * IdÅ‘jÃ¡rÃ¡s jelentÃ©sek lekÃ©rÃ©sÃ©t vÃ©gzÅ‘ szÃ¡l.
  * 
- * @author Ádám László
+ * @author ÃdÃ¡m LÃ¡szlÃ³
  * 
  */
 
@@ -38,7 +38,7 @@ public class ReportCollector implements Runnable {
 	}
 
 	/**
-	 * A szál indítására szolgáló metódus.
+	 * A szÃ¡l indÃ­tÃ¡sÃ¡ra szolgÃ¡lÃ³ metÃ³dus.
 	 */
 	public void start() {
 		this.t = new Thread(this);
@@ -46,7 +46,7 @@ public class ReportCollector implements Runnable {
 	}
 
 	/**
-	 * A szál megállítására szolgáló metódus.
+	 * A szÃ¡l megÃ¡llÃ­tÃ¡sÃ¡ra szolgÃ¡lÃ³ metÃ³dus.
 	 */
 	public void stop() {
 		this.t = null;
@@ -54,14 +54,14 @@ public class ReportCollector implements Runnable {
 
 	/**
 	 * 
-	 * @return A futtató szál.
+	 * @return A futtatÃ³ szÃ¡l.
 	 */
 	public Thread getT() {
 		return this.t;
 	}
 
 	/**
-	 * Idõjárás jelentések lekérése.
+	 * IdÅ‘jÃ¡rÃ¡s jelentÃ©sek lekÃ©rÃ©se.
 	 */
 	public void run() {
 		Thread thisThread = Thread.currentThread();
@@ -78,10 +78,10 @@ public class ReportCollector implements Runnable {
 	}
 
 	/**
-	 * Begyûjti a szerverrõl az idõjárás jelentéseket.
+	 * BegyÅ±jti a szerverrÅ‘l az idÅ‘jÃ¡rÃ¡s jelentÃ©seket.
 	 */
 	private void gatherData() {
-		logger.debug("Adatgyûjtés");
+		logger.debug("AdatgyÅ±jtÃ©s");
 		this.weatherReports.clear();
 		try {
 			Document doc = Jsoup.connect(url).get();
@@ -90,42 +90,42 @@ public class ReportCollector implements Runnable {
 				this.convertandAddWeatherReport(w.attr("onmouseover"));
 			}
 		} catch (Exception e) {
-			/* csak hálózathoz/oldalhoz kapcsolódó probléma lehet */
+			/* csak hÃ¡lÃ³zathoz/oldalhoz kapcsolÃ³dÃ³ problÃ©ma lehet */
 			this.controller.showAlert("Hiba!",
-					"Probléma az adatok lekérésénél.",
+					"ProblÃ©ma az adatok lekÃ©rÃ©sÃ©nÃ©l.",
 					TrayIcon.MessageType.ERROR);
 			return;
 		}
 		this.controller.refreshReports(this.weatherReports);
-		logger.debug("Adatgyûjtés vége");
+		logger.debug("AdatgyÅ±jtÃ©s vÃ©ge");
 	}
 
 	/**
-	 * Egy idõjárás jelentés szöveges alakját WeatherReport objektummá
-	 * konvertálja, és hozzáadja az eddig összegyûjtöttekhez.
+	 * Egy idÅ‘jÃ¡rÃ¡s jelentÃ©s szÃ¶veges alakjÃ¡t WeatherReport objektummÃ¡
+	 * konvertÃ¡lja, Ã©s hozzÃ¡adja az eddig Ã¶sszegyÅ±jtÃ¶ttekhez.
 	 * 
 	 * @param data
-	 *            A jelentés adatai nyers szövegként.
+	 *            A jelentÃ©s adatai nyers szÃ¶vegkÃ©nt.
 	 */
 	private void convertandAddWeatherReport(String data) {
 		data = data.substring(5, data.length() - 2);
 		String tokens[] = data.split("<br>");
 		if (tokens.length != 2) {
-			/* nem jelentés */
+			/* nem jelentÃ©s */
 			return;
 		}
 		WeatherReport weatherReport = new WeatherReport();
-		/* típus es hõmérséklet */
+		/* tÃ­pus es hÅ‘mÃ©rsÃ©klet */
 		tokens[0] = this.selectAmongLtGt(tokens[0]);
 		String typeAndDegreeTokens[] = tokens[0].split(", ");
 		weatherReport.setType(typeAndDegreeTokens[0]);
 		if (typeAndDegreeTokens.length == 2) {
-			/* van Celsius infó is */
+			/* van Celsius infÃ³ is */
 			weatherReport.setDegree(typeAndDegreeTokens[1]);
 		}
-		/* hely, idõ, feltöltõ */
+		/* hely, idÅ‘, feltÃ¶ltÅ‘ */
 		String locationAndSomeMoreTokens[] = tokens[1].split(", ");
-		/* elõfordulhat pl. Budapest, Ferihegy, 08:21 */
+		/* elÅ‘fordulhat pl. Budapest, Ferihegy, 08:21 */
 		String location = "";
 		String timeAndUser = "";
 		for (int i = 0; i < locationAndSomeMoreTokens.length; i++) {
@@ -139,20 +139,20 @@ public class ReportCollector implements Runnable {
 		String timeAndUserTokens[] = timeAndUser.split(" ");
 		weatherReport.setTime(timeAndUserTokens[0]);
 		if (timeAndUserTokens.length == 2) {
-			/* van feltöltõ is */
+			/* van feltÃ¶ltÅ‘ is */
 			weatherReport.setUser(timeAndUserTokens[1]);
 		}
-		/* az azonos, de más feltöltõtõl jövõ jelentésekbõl csak egy kell */
+		/* az azonos, de mÃ¡s feltÃ¶ltÅ‘tÅ‘l jÃ¶vÅ‘ jelentÃ©sekbÅ‘l csak egy kell */
 		if (!this.weatherReports.contains(weatherReport))
 			this.weatherReports.add(weatherReport);
 	}
 
 	/**
-	 * Eltávolítja a HTML tag-eket a szövegbõl.
+	 * EltÃ¡volÃ­tja a HTML tag-eket a szÃ¶vegbÅ‘l.
 	 * 
 	 * @param s
-	 *            A megtisztítani kívánt szöveg.
-	 * @return A szöveg HTML tag-ek nélkül.
+	 *            A megtisztÃ­tani kÃ­vÃ¡nt szÃ¶veg.
+	 * @return A szÃ¶veg HTML tag-ek nÃ©lkÃ¼l.
 	 */
 	private String selectAmongLtGt(String s) {
 		String temp = "";

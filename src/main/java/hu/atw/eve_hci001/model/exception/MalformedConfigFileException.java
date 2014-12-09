@@ -3,7 +3,7 @@ package hu.atw.eve_hci001.model.exception;
 public class MalformedConfigFileException extends Exception {
 
 	/**
-	 * Exception oszt·ly a konfigur·ciÛs f·jl hib·s felÈpÌtÈsÈnek jelzÈsÈre.
+	 * Exception oszt√°ly a konfigur√°ci√≥s f√°jl hib√°s fel√©p√≠t√©s√©nek jelz√©s√©re.
 	 */
 	private static final long serialVersionUID = 1L;
 

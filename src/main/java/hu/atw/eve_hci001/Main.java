@@ -10,18 +10,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Main oszt·ly a HÛfigyelı sz·m·ra.
+ * Main oszt√°ly a H√≥figyel≈ë sz√°m√°ra.
  * 
- * @author ¡d·m L·szlÛ
+ * @author √Åd√°m L√°szl√≥
  * 
  */
 public class Main {
 
 	/**
-	 * Main metÛdus.
+	 * Main met√≥dus.
 	 * 
 	 * @param args
-	 *            Nem sz¸ksÈgel paramÈtereket.
+	 *            Nem sz√ºks√©gel param√©tereket.
 	 */
 	public static void main(String[] args) {
 		BasicConfigurator.configure();

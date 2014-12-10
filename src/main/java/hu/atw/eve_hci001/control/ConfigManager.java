@@ -58,7 +58,7 @@ public class ConfigManager {
 		this.watchedTypes.put("szitálás", false);
 		this.watchedTypes.put("gyenge eső", false);
 		this.watchedTypes.put("eső", false);
-		this.watchedTypes.put("ónos eső", false);
+		this.watchedTypes.put("ónoseső", false);
 		this.watchedTypes.put("záporeső", false);
 		this.watchedTypes.put("havaseső", true);
 		this.watchedTypes.put("hószállingózás", true);

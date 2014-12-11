@@ -136,13 +136,14 @@ public class ReportCollector implements Runnable {
 			}
 		}
 		weatherReport.setLocation(location);
+		System.out.println(timeAndUser);
 		String timeAndUserTokens[] = timeAndUser.split(" ");
 		weatherReport.setTime(timeAndUserTokens[0]);
-		if (timeAndUserTokens.length == 2) {
+		if (timeAndUserTokens.length == 3) {
 			/* van feltöltő is */
-			weatherReport.setUser(timeAndUserTokens[1]);
+			weatherReport.setUser(timeAndUserTokens[2]);
 		}
-		/* az azonos, de más feltöltőtől jövő jelentésekből csak egy kell */
+
 		if (!this.weatherReports.contains(weatherReport))
 			this.weatherReports.add(weatherReport);
 	}

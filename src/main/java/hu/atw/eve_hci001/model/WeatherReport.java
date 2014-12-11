@@ -17,11 +17,11 @@ public class WeatherReport {
 	 * Konstruktor.
 	 */
 	public WeatherReport() {
-		this.type = "";
-		this.location = "";
-		this.time = "";
-		this.user = "";
-		this.degree = "";
+		this.type = "-";
+		this.location = "-";
+		this.time = "-";
+		this.user = "-";
+		this.degree = "-";
 	}
 
 	/**
@@ -107,6 +107,23 @@ public class WeatherReport {
 	 */
 	public void setDegree(String degree) {
 		this.degree = degree;
+	}
+
+	/**
+	 * Visszaadja a jelentés rövid leírását (typus, hely, időpont)
+	 * 
+	 * @return A jelentés rövid leírása.
+	 */
+	public String shortDescription() {
+		String desc = this.type + " - " + this.location + ", " + this.time;
+		return desc;
+	}
+
+	@Override
+	public String toString() {
+		return "Jelentés:     " + type + "\nHely:     " + location
+				+ "\nHőmérséklet:     " + degree + "\nIdőpont:     " + time
+				+ "\nBeküldő:     " + user;
 	}
 
 	@Override

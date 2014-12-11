@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  * Az értesítési ikont kezelő osztály.
@@ -109,8 +110,14 @@ public class SysTray implements ActionListener {
 				this.notifyYesNoItem.setLabel("Kikapcsol");
 				this.controller.setNotifyRequiestedFromMenu(true);
 			}
+			/* beállítások megnyitása */
 		} else if (e.getSource() == this.settingsItem) {
 			this.controller.showSettingsPanel();
+			/* bővebb info egy jelentésről */
+		} else if (e.getSource() instanceof ReportMenuItem) {
+			JOptionPane.showMessageDialog(null,
+					((ReportMenuItem) e.getSource()).getReportText(),
+					"Információ", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -155,9 +162,8 @@ public class SysTray implements ActionListener {
 		this.popup.removeAll();
 		this.currentReportsMenu.removeAll();
 		for (WeatherReport weatherReport : weatherReports) {
-			MenuItem reportItem = new MenuItem(weatherReport.getType() + " - "
-					+ weatherReport.getLocation() + ", "
-					+ weatherReport.getTime());
+			ReportMenuItem reportItem = new ReportMenuItem(weatherReport);
+			reportItem.addActionListener(this);
 			this.currentReportsMenu.add(reportItem);
 			this.reportCounter++;
 		}

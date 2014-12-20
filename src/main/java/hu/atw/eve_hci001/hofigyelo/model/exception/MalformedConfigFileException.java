@@ -1,4 +1,4 @@
-package hu.atw.eve_hci001.model.exception;
+package hu.atw.eve_hci001.hofigyelo.model.exception;
 
 public class MalformedConfigFileException extends Exception {
 

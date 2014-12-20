@@ -1,2 +1,2 @@
 cd target
-java -jar hofigyelo-1.0.jar
+java -jar hofigyelo-1.1.jar

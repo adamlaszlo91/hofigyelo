@@ -1,7 +1,7 @@
-package hu.atw.eve_hci001;
+package hu.atw.eve_hci001.hofigyelo;
 
-import hu.atw.eve_hci001.control.ConfigManager;
-import hu.atw.eve_hci001.control.HofigyeloController;
+import hu.atw.eve_hci001.hofigyelo.control.ConfigManager;
+import hu.atw.eve_hci001.hofigyelo.control.HofigyeloController;
 
 import java.awt.SystemTray;
 

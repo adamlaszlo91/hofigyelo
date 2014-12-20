@@ -1,6 +1,6 @@
-package hu.atw.eve_hci001.control;
+package hu.atw.eve_hci001.hofigyelo.control;
 
-import hu.atw.eve_hci001.model.exception.MalformedConfigFileException;
+import hu.atw.eve_hci001.hofigyelo.model.exception.MalformedConfigFileException;
 
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -43,47 +43,47 @@ public class ConfigManager {
 	 */
 	public ConfigManager(String configFilePath) {
 		this.configFilePath = configFilePath;
-		this.notifyRequiested = true;
-		this.refreshInterval = 60000;
-		this.watchedTypes = new HashMap<String, Boolean>();
+		notifyRequiested = true;
+		refreshInterval = 60000;
+		watchedTypes = new HashMap<String, Boolean>();
 		/*
-		 * alapértelmezett inicializálás, hóval kapcsolatos időjárás események
+		 * alapértelmezett inicializálás: hóval kapcsolatos időjárás események
 		 * figyelésére
 		 */
-		this.watchedTypes.put("derült", false);
-		this.watchedTypes.put("gyengén felhős", false);
-		this.watchedTypes.put("közepesen felhős", false);
-		this.watchedTypes.put("erősen felhős", false);
-		this.watchedTypes.put("borult", false);
-		this.watchedTypes.put("szitálás", false);
-		this.watchedTypes.put("gyenge eső", false);
-		this.watchedTypes.put("eső", false);
-		this.watchedTypes.put("ónoseső", false);
-		this.watchedTypes.put("záporeső", false);
-		this.watchedTypes.put("havaseső", true);
-		this.watchedTypes.put("hószállingózás", true);
-		this.watchedTypes.put("havazás", true);
-		this.watchedTypes.put("intenzív havazás", true);
-		this.watchedTypes.put("hófúvás", true);
-		this.watchedTypes.put("hózápor", true);
-		this.watchedTypes.put("párásság", false);
-		this.watchedTypes.put("köd", false);
-		this.watchedTypes.put("száraz zivatar", false);
-		this.watchedTypes.put("zivatar", false);
-		this.watchedTypes.put("hózivatar", true);
-		this.watchedTypes.put("jégeső", false);
-		this.watchedTypes.put("pára", false);
-		this.watchedTypes.put("zápor", false);
+		watchedTypes.put("derült", false);
+		watchedTypes.put("gyengén felhős", false);
+		watchedTypes.put("közepesen felhős", false);
+		watchedTypes.put("erősen felhős", false);
+		watchedTypes.put("borult", false);
+		watchedTypes.put("szitálás", false);
+		watchedTypes.put("gyenge eső", false);
+		watchedTypes.put("eső", false);
+		watchedTypes.put("ónoseső", false);
+		watchedTypes.put("záporeső", false);
+		watchedTypes.put("havaseső", true);
+		watchedTypes.put("hószállingózás", true);
+		watchedTypes.put("havazás", true);
+		watchedTypes.put("intenzív havazás", true);
+		watchedTypes.put("hófúvás", true);
+		watchedTypes.put("hózápor", true);
+		watchedTypes.put("párásság", false);
+		watchedTypes.put("köd", false);
+		watchedTypes.put("száraz zivatar", false);
+		watchedTypes.put("zivatar", false);
+		watchedTypes.put("hózivatar", true);
+		watchedTypes.put("jégeső", false);
+		watchedTypes.put("pára", false);
+		watchedTypes.put("zápor", false);
 		/* konfigurációs fájl elérhetőségének vizsgálata */
 		try {
-			FileReader fr = new FileReader(this.configFilePath);
+			FileReader fr = new FileReader(configFilePath);
 			fr.close();
-			this.configFileAvailable = true;
+			configFileAvailable = true;
 		} catch (FileNotFoundException fnfe) {
-			this.configFileAvailable = false;
+			configFileAvailable = false;
 		} catch (IOException ioe) {
 			/* valami probléma lehet a fájlkezeléssel */
-			this.configFileAvailable = false;
+			configFileAvailable = false;
 		}
 	}
 
@@ -100,7 +100,7 @@ public class ConfigManager {
 	 *            A felhasználó kér-e értesítést.
 	 */
 	public void setNotifyRequiested(boolean notifyRequiested) {
-		logger.debug("Beállítás: " + notifyRequiested);
+		logger.debug("Jelzés beállítás: " + notifyRequiested);
 		this.notifyRequiested = notifyRequiested;
 	}
 
@@ -118,7 +118,7 @@ public class ConfigManager {
 	 *            A frissítés gyakorisága milliszekundumban.
 	 */
 	public void setRefreshInterval(long refreshInterval) {
-		logger.debug("Beállítás: " + refreshInterval + " ms");
+		logger.debug("Időköz beállítás: " + refreshInterval + " ms");
 		this.refreshInterval = refreshInterval;
 	}
 
@@ -146,7 +146,7 @@ public class ConfigManager {
 	 *         viszony.
 	 */
 	public Boolean isWatchedType(String type) {
-		if (!this.watchedTypes.containsKey(type))
+		if (!watchedTypes.containsKey(type))
 			return null;
 		return watchedTypes.get(type);
 	}
@@ -160,8 +160,8 @@ public class ConfigManager {
 	 *            Figyelje-e.
 	 */
 	public void modifyWatchedType(String weatherType, boolean b) {
-		logger.debug("Beállítás: " + weatherType + " = " + b);
-		this.watchedTypes.put(weatherType, b);
+		logger.debug("Figyelés beállítása: " + weatherType + " = " + b);
+		watchedTypes.put(weatherType, b);
 	}
 
 	/**
@@ -171,10 +171,10 @@ public class ConfigManager {
 	 */
 	public synchronized void refreshConfig() throws IOException,
 			MalformedConfigFileException {
-		if (!this.configFileAvailable)
+		if (!configFileAvailable)
 			return;
-		String configText = this.readConfigFile();
-		this.buildConfig(configText);
+		String configText = readConfigFile();
+		buildConfig(configText);
 	}
 
 	/**
@@ -185,22 +185,22 @@ public class ConfigManager {
 	 * @throws IOException
 	 */
 	public synchronized void writeConfigFile() throws IOException {
-		System.out.println("Fájlba írás");
+		logger.debug("Fájlba írás");
 		BufferedWriter bw = null;
 		try {
 			bw = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(this.configFilePath), "UTF-8"));
+					new FileOutputStream(configFilePath), "UTF-8"));
 			bw.write("# értesítés\n");
 			bw.write("CONFIG_notifyRequiested = "
-					+ (this.notifyRequiested ? "1" : "0") + "\n");
+					+ (notifyRequiested ? "1" : "0") + "\n");
 			bw.write("# értesítés időzítése\n");
-			bw.write("CONFIG_refreshInterval = " + this.refreshInterval + "\n");
+			bw.write("CONFIG_refreshInterval = " + refreshInterval + "\n");
 			bw.write("# figyelt jelentések\n");
-			for (String key : this.watchedTypes.keySet()) {
+			for (String key : watchedTypes.keySet()) {
 				bw.write(key.replace(" ", "_") + " = "
 						+ (watchedTypes.get(key) ? "1" : "0") + "\n");
 			}
-			this.configFileAvailable = true;
+			configFileAvailable = true;
 		} catch (IOException ioe) {
 			throw ioe;
 		} finally {
@@ -208,7 +208,6 @@ public class ConfigManager {
 				bw.close();
 			}
 		}
-
 	}
 
 	/**
@@ -234,7 +233,7 @@ public class ConfigManager {
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(
-					this.configFilePath), "UTF-8"));
+					configFilePath), "UTF-8"));
 			StringBuilder builder = new StringBuilder();
 			String file = "";
 			while ((file = br.readLine()) != null) {
@@ -273,12 +272,12 @@ public class ConfigManager {
 				String pairs[] = lines[i].split("=");
 				if (pairs[0].equals("CONFIG_notifyRequiested")) {
 					if (pairs[1].equals("1")) {
-						this.notifyRequiested = true;
+						notifyRequiested = true;
 					} else {
-						this.notifyRequiested = false;
+						notifyRequiested = false;
 					}
 				} else if (pairs[0].equals("CONFIG_refreshInterval")) {
-					this.refreshInterval = Integer.parseInt(pairs[1]);
+					refreshInterval = Integer.parseInt(pairs[1]);
 				} else {
 					if (pairs[1].equals("1")) {
 						watchedTypes.put(pairs[0].replace("_", " "), true);

@@ -1,9 +1,9 @@
-package hu.atw.eve_hci001.control;
+package hu.atw.eve_hci001.hofigyelo.control;
 
-import hu.atw.eve_hci001.model.WeatherReport;
-import hu.atw.eve_hci001.model.exception.MalformedConfigFileException;
-import hu.atw.eve_hci001.view.SettingsPanel;
-import hu.atw.eve_hci001.view.SysTray;
+import hu.atw.eve_hci001.hofigyelo.model.WeatherReport;
+import hu.atw.eve_hci001.hofigyelo.model.exception.MalformedConfigFileException;
+import hu.atw.eve_hci001.hofigyelo.view.SettingsPanel;
+import hu.atw.eve_hci001.hofigyelo.view.SysTray;
 
 import java.awt.TrayIcon;
 import java.io.IOException;
@@ -27,33 +27,33 @@ public class HofigyeloController {
 	 * Konstruktor.
 	 */
 	public HofigyeloController() {
-		this.sysTray = new SysTray(this);
-		this.configManager = new ConfigManager("./hofigyelo.ini");
+		sysTray = new SysTray(this);
+		configManager = new ConfigManager("./hofigyelo.ini");
 		/* konfigurásiód fájl beolvasása */
-		if (!this.configManager.isConfigFileAvailable()) {
-			this.showAlert(
+		if (!configManager.isConfigFileAvailable()) {
+			showAlert(
 					"Figyelem!",
 					"A konfigurációs fájl nem található. Az alapértelmezett beállítások kerülnek használatra.",
 					TrayIcon.MessageType.WARNING);
 		} else {
 			try {
-				this.configManager.refreshConfig();
+				configManager.refreshConfig();
 			} catch (IOException e) {
-				this.showAlert(
+				showAlert(
 						"Figyelem!",
 						"A konfigurációs fájl olvasása sikertelen. Az alapértelmezett beállítások kerülnek használatra.",
 						TrayIcon.MessageType.WARNING);
 			} catch (MalformedConfigFileException e) {
-				this.showAlert(
+				showAlert(
 						"Figyelem!",
 						"Hibás konfigurációs fájl. Az alapértelmezett beállítások kerülnek használatra.",
 						TrayIcon.MessageType.WARNING);
 			}
 		}
-		this.sysTray.refreshShownSettings();
-		this.lastShownWeatherReports = new ArrayList<WeatherReport>();
-		this.reportCollector = new ReportCollector(this);
-		this.reportCollector.start();
+		sysTray.refreshShownSettings();
+		lastShownWeatherReports = new ArrayList<WeatherReport>();
+		reportCollector = new ReportCollector(this);
+		reportCollector.start();
 	}
 
 	/**
@@ -66,33 +66,33 @@ public class HofigyeloController {
 		ArrayList<WeatherReport> reportsToBeShown = new ArrayList<WeatherReport>();
 		String tooltipText = "";
 		for (WeatherReport weatherReport : newWeatherReports) {
-			Boolean isWatched = this.configManager.isWatchedType(weatherReport
+			Boolean isWatched = configManager.isWatchedType(weatherReport
 					.getType());
 			/* ismeretlen/új időjárás állapot */
 			if (isWatched == null) {
-				this.showAlert("Figyelem!", "Ismeretlen időjárás állapot: \""
+				showAlert("Figyelem!", "Ismeretlen időjárás állapot: \""
 						+ weatherReport.getType()
 						+ "\"\nKérem, jelezze a fejlesztőnek!",
 						TrayIcon.MessageType.WARNING);
 				/* figyelt időjárás állapot */
 			} else if (isWatched) {
 				reportsToBeShown.add(weatherReport);
-				if (!this.lastShownWeatherReports.contains(weatherReport)) {
+				if (!lastShownWeatherReports.contains(weatherReport)) {
 					tooltipText += weatherReport.getType() + " - "
 							+ weatherReport.getLocation() + ", "
 							+ weatherReport.getTime() + "\n";
 				}
 			}
 		}
-		this.sysTray.refreshSnowReports(reportsToBeShown);
-		this.sysTray.weatherUpdated();
+		sysTray.refreshSnowReports(reportsToBeShown);
+		sysTray.weatherUpdated();
 		/* jelentések átmásolása a helyi listába */
-		this.lastShownWeatherReports.clear();
+		lastShownWeatherReports.clear();
 		for (WeatherReport weatherReport : reportsToBeShown) {
-			this.lastShownWeatherReports.add(weatherReport);
+			lastShownWeatherReports.add(weatherReport);
 		}
-		if (this.configManager.isNotifyRequiested() && !tooltipText.equals(""))
-			this.showAlert("Új jelentés(ek)", tooltipText,
+		if (configManager.isNotifyRequiested() && !tooltipText.equals(""))
+			showAlert("Új jelentés(ek)", tooltipText,
 					TrayIcon.MessageType.INFO);
 	}
 
@@ -104,8 +104,8 @@ public class HofigyeloController {
 	 *            Megjelenjen-e értesítés.
 	 */
 	public void setNotifyRequiestedFromPanel(boolean notifyRequiested) {
-		this.configManager.setNotifyRequiested(notifyRequiested);
-		this.sysTray.refreshShownSettings();
+		configManager.setNotifyRequiested(notifyRequiested);
+		sysTray.refreshShownSettings();
 	}
 
 	/**
@@ -116,9 +116,9 @@ public class HofigyeloController {
 	 *            Megjelenjen-e értesítés.
 	 */
 	public void setNotifyRequiestedFromMenu(boolean notifyRequiested) {
-		this.configManager.setNotifyRequiested(notifyRequiested);
-		if (this.settingsPanel != null) {
-			this.settingsPanel.refreshNotifySetting();
+		configManager.setNotifyRequiested(notifyRequiested);
+		if (settingsPanel != null) {
+			settingsPanel.refreshNotifySetting();
 		}
 	}
 
@@ -134,29 +134,29 @@ public class HofigyeloController {
 	 *            Az értesítés típusa.
 	 */
 	public void showAlert(String title, String text, TrayIcon.MessageType mType) {
-		this.sysTray.showAlert(title, text, mType);
+		sysTray.showAlert(title, text, mType);
 	}
 
 	/**
 	 * A beállításokat tartalmató ablak megjelenítése.
 	 */
 	public void showSettingsPanel() {
-		this.settingsPanel = new SettingsPanel(this);
+		settingsPanel = new SettingsPanel(this);
 	}
 
 	/**
 	 * A beállításokat tartalmató ablakot eltávolítja.
 	 */
 	public void destroySettingsPanel() {
-		this.settingsPanel = null;
+		settingsPanel = null;
 	}
 
 	/**
 	 * Leállítja a programot.
 	 */
 	public void exit() {
-		this.reportCollector.stop();
-		this.sysTray.remove();
+		reportCollector.stop();
+		sysTray.remove();
 		System.exit(0);
 	}
 
@@ -164,7 +164,7 @@ public class HofigyeloController {
 	 * @return A felhasználó kért-e értesítést.
 	 */
 	public boolean isNotifyRequiested() {
-		return this.configManager.isNotifyRequiested();
+		return configManager.isNotifyRequiested();
 	}
 
 	/**
@@ -172,14 +172,14 @@ public class HofigyeloController {
 	 * @return A frissítés gyakorisága milliszekundumban.
 	 */
 	public long getRefreshInterval() {
-		return this.configManager.getRefreshInterval();
+		return configManager.getRefreshInterval();
 	}
 
 	/**
 	 * @return A figyelt időjárási állapotok és státuszuk.
 	 */
 	public HashMap<String, Boolean> getWatchedTypes() {
-		return this.configManager.getWatchedTypes();
+		return configManager.getWatchedTypes();
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class HofigyeloController {
 	 *            Figyelje-e.
 	 */
 	public void modifyWatchedType(String weatherType, boolean b) {
-		this.configManager.modifyWatchedType(weatherType, b);
+		configManager.modifyWatchedType(weatherType, b);
 	}
 
 	/**
@@ -199,9 +199,9 @@ public class HofigyeloController {
 	 */
 	public void writeSettings() {
 		try {
-			this.configManager.writeConfigFile();
+			configManager.writeConfigFile();
 		} catch (IOException e) {
-			this.showAlert("Hiba!", "A beállítások mentése sikertelen.",
+			showAlert("Hiba!", "A beállítások mentése sikertelen.",
 					TrayIcon.MessageType.ERROR);
 		}
 	}
@@ -210,8 +210,8 @@ public class HofigyeloController {
 	 * Azonnal frissíti a jelentéseket.
 	 */
 	public void refreshReportsNow() {
-		synchronized (this.reportCollector.getT()) {
-			this.reportCollector.getT().notify();
+		synchronized (reportCollector.getT()) {
+			reportCollector.getT().notify();
 		}
 	}
 
@@ -221,6 +221,6 @@ public class HofigyeloController {
 	 *            A frissítés gyakorisága milliszekundumban.
 	 */
 	public void setRefreshInterval(long refreshInterval) {
-		this.configManager.setRefreshInterval(refreshInterval);
+		configManager.setRefreshInterval(refreshInterval);
 	}
 }

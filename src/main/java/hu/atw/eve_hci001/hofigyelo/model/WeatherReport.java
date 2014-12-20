@@ -1,4 +1,4 @@
-package hu.atw.eve_hci001.model;
+package hu.atw.eve_hci001.hofigyelo.model;
 
 /**
  * Egy időjárás bejelentést reprezentálo osztály.
@@ -17,11 +17,11 @@ public class WeatherReport {
 	 * Konstruktor.
 	 */
 	public WeatherReport() {
-		this.type = "-";
-		this.location = "-";
-		this.time = "-";
-		this.user = "-";
-		this.degree = "-";
+		type = "?";
+		location = "?";
+		time = "?";
+		user = "?";
+		degree = "?";
 	}
 
 	/**
@@ -126,6 +126,9 @@ public class WeatherReport {
 				+ "\nBeküldő:     " + user;
 	}
 
+	/**
+	 * Overridden hashCode() method.
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -139,6 +142,9 @@ public class WeatherReport {
 		return result;
 	}
 
+	/**
+	 * Overridden equals() method.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

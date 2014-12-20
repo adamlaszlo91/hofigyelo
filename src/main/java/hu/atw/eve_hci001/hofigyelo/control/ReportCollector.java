@@ -1,6 +1,6 @@
-package hu.atw.eve_hci001.control;
+package hu.atw.eve_hci001.hofigyelo.control;
 
-import hu.atw.eve_hci001.model.WeatherReport;
+import hu.atw.eve_hci001.hofigyelo.model.WeatherReport;
 
 import java.awt.TrayIcon;
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ public class ReportCollector implements Runnable {
 	 * Konstruktor.
 	 * 
 	 * @param controller
-	 *            A controllerl objektum.
+	 *            A controller objektum.
 	 */
 	public ReportCollector(HofigyeloController controller) {
-		this.weatherReports = new ArrayList<WeatherReport>();
+		weatherReports = new ArrayList<WeatherReport>();
 		this.controller = controller;
 	}
 
@@ -41,15 +41,15 @@ public class ReportCollector implements Runnable {
 	 * A szál indítására szolgáló metódus.
 	 */
 	public void start() {
-		this.t = new Thread(this);
-		this.t.start();
+		t = new Thread(this);
+		t.start();
 	}
 
 	/**
 	 * A szál megállítására szolgáló metódus.
 	 */
 	public void stop() {
-		this.t = null;
+		t = null;
 	}
 
 	/**
@@ -57,21 +57,21 @@ public class ReportCollector implements Runnable {
 	 * @return A futtató szál.
 	 */
 	public Thread getT() {
-		return this.t;
+		return t;
 	}
 
 	/**
-	 * Időjárás jelentések lekérése.
+	 * Időjárás jelentések ütemezett lekérése.
 	 */
 	public void run() {
 		Thread thisThread = Thread.currentThread();
-		while (this.t == thisThread) {
-			this.gatherData();
-			synchronized (this.t) {
+		while (t == thisThread) {
+			collectReports();
+			synchronized (t) {
 				try {
-					this.t.wait(this.controller.getRefreshInterval());
+					t.wait(controller.getRefreshInterval());
 				} catch (InterruptedException e) {
-					logger.debug(e.toString());
+					logger.warn(e.toString());
 				}
 			}
 		}
@@ -80,23 +80,23 @@ public class ReportCollector implements Runnable {
 	/**
 	 * Begyűjti a szerverről az időjárás jelentéseket.
 	 */
-	private void gatherData() {
+	private void collectReports() {
 		logger.debug("Adatgyűjtés");
-		this.weatherReports.clear();
+		weatherReports.clear();
 		try {
 			Document doc = Jsoup.connect(url).get();
 			Elements elements = doc.select("area[onmouseover]");
 			for (Element w : elements) {
-				this.convertandAddWeatherReport(w.attr("onmouseover"));
+				convertandAddWeatherReport(w.attr("onmouseover"));
 			}
 		} catch (Exception e) {
 			/* csak hálózathoz/oldalhoz kapcsolódó probléma lehet */
-			this.controller.showAlert("Hiba!",
-					"Probléma az adatok lekérésénél.",
+			controller.showAlert("Hiba!", "Probléma az adatok lekérésénél.",
 					TrayIcon.MessageType.ERROR);
+			logger.error("Probléma az adatok lekérésénél.");
 			return;
 		}
-		this.controller.refreshReports(this.weatherReports);
+		controller.refreshReports(weatherReports);
 		logger.debug("Adatgyűjtés vége");
 	}
 
@@ -116,7 +116,7 @@ public class ReportCollector implements Runnable {
 		}
 		WeatherReport weatherReport = new WeatherReport();
 		/* típus es hőmérséklet */
-		tokens[0] = this.selectAmongLtGt(tokens[0]);
+		tokens[0] = cleanFromHTML(tokens[0]);
 		String typeAndDegreeTokens[] = tokens[0].split(", ");
 		weatherReport.setType(typeAndDegreeTokens[0]);
 		if (typeAndDegreeTokens.length == 2) {
@@ -136,7 +136,6 @@ public class ReportCollector implements Runnable {
 			}
 		}
 		weatherReport.setLocation(location);
-		System.out.println(timeAndUser);
 		String timeAndUserTokens[] = timeAndUser.split(" ");
 		weatherReport.setTime(timeAndUserTokens[0]);
 		if (timeAndUserTokens.length == 3) {
@@ -144,8 +143,8 @@ public class ReportCollector implements Runnable {
 			weatherReport.setUser(timeAndUserTokens[2]);
 		}
 
-		if (!this.weatherReports.contains(weatherReport))
-			this.weatherReports.add(weatherReport);
+		if (!weatherReports.contains(weatherReport))
+			weatherReports.add(weatherReport);
 	}
 
 	/**
@@ -155,7 +154,7 @@ public class ReportCollector implements Runnable {
 	 *            A megtisztítani kívánt szöveg.
 	 * @return A szöveg HTML tag-ek nélkül.
 	 */
-	private String selectAmongLtGt(String s) {
+	private String cleanFromHTML(String s) {
 		String temp = "";
 		int c = 0;
 		for (int i = 0; i < s.length(); i++) {
